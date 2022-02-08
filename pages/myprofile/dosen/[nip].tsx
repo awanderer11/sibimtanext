@@ -1,59 +1,53 @@
 import { Container, Button, useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
-import { InputWihtText } from "../../component/InputText";
-import { db } from "../../config/firebase";
+import React, { useState, useEffect } from "react";
+import { InputWihtText } from "../../../component/InputText";
+import { db, auth } from "../../../config/firebase";
+import router from "next/router";
 
-const Dosen = () => {
+const MyProfile = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
     nip: "",
     nama: "",
     kontak: "",
-    tanggallahir: "",
     email: "",
-    password: "",
-    isLogin: false,
-    roles: "dosen",
-    created_at: Date.now().toString(),
     updated_at: Date.now().toString(),
-    
-    
   });
-
-  const onSubmit = async () => {
-    setLoading(true);
-    try {
+  useEffect(() => {
+    async function fetch() {
       await db
-        .doc(`data-dosen/${state.nip}`)
+        .doc(`data-dosen/${router.query.nip}`)
         .get()
         .then((docs) => {
-          if (docs.exists) {
-            toast({
-              description: "nip telah terdaftar",
-              status: "error",
-            });
-            setLoading(false);
-            return;
-          } else {
-            db.doc(`data-dosen/${state.nip}`).set(state);
-            toast({
-              description: "Tambah Data Sukses",
-              status: "success",
-            });
-            setLoading(false);
-            return;
-          }
+          setState({ ...(docs.data() as any) });
+        })
+        .catch((e) => {
+          console.log(e);
         });
-    } catch (error: any) {
-      setLoading(false);
-      toast({
-        description: "Gagal tambahkan data",
-        status: "error",
-      });
     }
+    fetch();
+  }, []);
+
+const onSubmit = async (nip: string) => {
+    setLoading(true);
+    await db
+      .doc(`data-dosen/${nip}`)
+      .update(state)
+      .then(() => {
+        toast({
+          description: "Update Data Berhasil",
+          status: "success",
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
     setLoading(false);
   };
+
+
   return (
     <Container maxW={"container.xl"}>
       <InputWihtText
@@ -82,25 +76,17 @@ const Dosen = () => {
           setState((prev) => ({ ...prev, email: e.target.value }))
         }
       />
-      <InputWihtText
-        title="Password"
-        value={state.password}
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, password: e.target.value }))
-        }
-      />
-      
       <Button
         colorScheme={"green"}
         color={"white"}
         mt={10}
-        onClick={onSubmit}
+        onClick={() => onSubmit(state.nip)}
         isLoading={loading}
       >
-        Tambah
+        Simpan
       </Button>
     </Container>
   );
 };
 
-export default Dosen;
+export default MyProfile;

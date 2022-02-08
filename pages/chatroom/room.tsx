@@ -11,15 +11,6 @@ const Room = () => {
  
   useEffect(() => {
     async function fetch() {
-      // db.collection("chatRoom").doc("123456_12345").collection("chat").onSnapshot((docs) => {
-      //   const data: any[] = [];
-      //   docs.forEach((it) => {
-      //     data.push({
-      //       ...it.data(),
-      //     });
-      //   });
-      //   setState(data);
-      // });
       db.collection('chat').onSnapshot((v) => {
         const data: any[]= []
         v.forEach((vv) => {

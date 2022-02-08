@@ -30,25 +30,33 @@ import {
   
   export default function SidebarContents(props: SidebarContentProps) {
     const sidebar = useDisclosure();
-    const integrations = useDisclosure();
     const [roles, setRoles] = useState("")
+    const [nim, setnim] = useState("")
+    const [nip, setnip] = useState("")
 
     useEffect(() => {
           async function fetch() {
             let roles = ''
+            let nim = ''
+            let nip = ''
               db.collection(`/data-mahasiswa`).where('email', '==', auth.currentUser?.email).get().then((docs) => {
                 if(docs.empty) {
                   db.collection('/data-dosen').where('email', '==', auth.currentUser?.email).get().then((v) => {
                       v.forEach((b) => {
                         roles = b.data().roles
+                        nip = b.data().nip
                         setRoles(b.data().roles)
+                        setnip(b.data().nip)
                       })
                   })
                   return;
                 }
                 docs.forEach((vv) => {
                   roles = vv.data().roles
+                  nim = vv.data().nim
                   setRoles(vv.data().roles)
+                  setnim(vv.data().nim)
+                  
                 })
               })
           }
@@ -116,12 +124,8 @@ import {
         >
           {roles === 'admin' && (
               <>
-               <NavItem icon={BsFillGridFill} link="/">
+          <NavItem icon={BsFillGridFill} link="/">
             Dashboard
-          </NavItem>
-          <Divider />
-          <NavItem icon={FiUsers} link="/datamahasiswa">
-            My Profile
           </NavItem>
           <Divider />
           <NavItem icon={FiUsers} link="/datamahasiswa">
@@ -166,52 +170,52 @@ import {
           )}
 
           {roles === 'mahasiswa' && (
-                       <>
-                       <NavItem icon={BsFillGridFill} link="/">
-                    Dashboard
-                  </NavItem>
-                  <Divider />
-                  <NavItem icon={FiUsers} link="/datamahasiswa">
-                    My Profile
-                  </NavItem>
-                  <Divider />
-                  <NavItem icon={FiUsers} link="/datamahasiswa">
-                    Data Mahasiswa
-                  </NavItem>
-                  <Divider />
-                  <NavItem icon={BsFillChatLeftQuoteFill} link="/pengajuanjudul">
-                    Pengajuan Judul
-                  </NavItem>
-                  <Divider />
-                  <NavItem icon={BsBookHalf} link="/bimbinganjudul">
-                    Bimbingan Judul
-                  </NavItem>
-                  <Divider />
-                  <NavItem icon={BsFillBookmarkFill} link="/proposal">
-                    Proposal
-                  </NavItem>
-                  <NavItem icon={BsFillBookmarkFill} link="/hasil">
-                    Hasil
-                  </NavItem>
-                  <NavItem icon={BsFillBookmarkFill} link="/tutup">
-                    Tutup
-                  </NavItem>
-                  <Divider />
-                  <NavItem icon={BsFillChatSquareTextFill} link="/laporan">
-                    Laporan
-                  </NavItem>
-                  <Divider />
-                  <NavItem icon={BsFillBookFill} link="/judulskripsi">
-                    Judul Skripsi
-                  </NavItem>
-                  <Divider />
-                  <NavItem icon={BsFillBookmarksFill} link="/administrasi">
-                    Administrasi
-                  </NavItem>
-                  <Divider />
-                      </>
+          <>
+            <NavItem icon={BsFillGridFill} link="/">
+              Dashboard
+            </NavItem>
+            <Divider />
+            <NavItem icon={FiUsers} onClick={() => router.push(`/myprofile/mhs/${nim}`)}>
+              My Profile
+            </NavItem>
+            <Divider />
+            <NavItem icon={FiUsers} link="/datamahasiswa">
+              Data Mahasiswa
+            </NavItem>
+            <Divider />
+            <NavItem icon={BsFillChatLeftQuoteFill} link="/pengajuanjudul">
+              Pengajuan Judul
+            </NavItem>
+            <Divider />
+            <NavItem icon={BsBookHalf} link="/bimbinganjudul">
+              Bimbingan Judul
+            </NavItem>
+            <Divider />
+            <NavItem icon={BsFillBookmarkFill} link="/proposal">
+              Proposal
+            </NavItem>
+            <NavItem icon={BsFillBookmarkFill} link="/hasil">
+              Hasil
+            </NavItem>
+            <NavItem icon={BsFillBookmarkFill} link="/tutup">
+              Tutup
+            </NavItem>
+            <Divider />
+            <NavItem icon={BsFillChatSquareTextFill} link="/laporan">
+              Laporan
+            </NavItem>
+            <Divider />
+            <NavItem icon={BsFillBookFill} link="/judulskripsi">
+              Judul Skripsi
+            </NavItem>
+            <Divider />
+            <NavItem icon={BsFillBookmarksFill} link="/administrasi">
+              Administrasi
+            </NavItem>
+            <Divider />
+          </>
           )}
-</Flex>         
+        </Flex>         
         <Flex pos={"absolute"} bottom={5} p={4}>
           <Button
             w={200}

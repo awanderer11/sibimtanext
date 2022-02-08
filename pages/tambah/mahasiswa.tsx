@@ -1,15 +1,21 @@
-import { Container, Button, useToast } from "@chakra-ui/react";
-import React, { useState } from "react";
+import { Container, Button, useToast, Select } from "@chakra-ui/react";
+import React, { useState, useEffect } from "react";
 import { InputWihtText } from "../../component/InputText";
 import { db, auth } from "../../config/firebase";
 
 const Mahasiswa = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
+  const [dosen, setDosen] = useState<any[]>([]);
   const [state, setState] = useState({
     nim: "",
     nama: "",
+    tanggallahir: "",
     tahunmasuk: "",
+    alamat: "",
+    kontak: "",
+    jeniskelamin: "",
+    agama: "",
     email: "",
     password: "",
     judul: {"abstrak":"","judul": ""},
@@ -28,17 +34,22 @@ const Mahasiswa = () => {
     updated_at: Date.now().toString(),
   });
 
+  useEffect(() => {
+    async function fetch() {
+      db.collection('data-dosen').onSnapshot((v) => {
+        const data: any[]= []
+        v.forEach((vv) => {
+          data.push({...vv.data()})
+        })
+        setDosen(data)
+      })
+    }
+    fetch();
+  }, []);
+
   const onSubmit = async () => {
     setLoading(true);
     try {
-  //    await auth
-  //   .createUserWithEmailAndPassword(state.email, "qwert1234")
-  //   .then((response) => {
-  //    console.log(response)
-  //   })
-  // .catch((error) => {
-  //  return { error };
-  // });
       await db
         .doc(`data-mahasiswa/${state.nim}`)
         .get()
@@ -90,6 +101,11 @@ const Mahasiswa = () => {
           setState((prev) => ({ ...prev, tahunmasuk: e.target.value }))
         }
       />
+      <Select mt="4" align={"start"} width={"400px"}>
+        {dosen.map((it)=> <option value={it.nama}  onChange={(e) =>
+          setDosen((prev) => ({ ...prev, pembimbing1: { nip: e.target.value, nama: e.target.value }}))
+        }>{it.nama}</option>)}
+      </Select>
       <InputWihtText
         title="Email"
         value={state.email}
