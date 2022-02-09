@@ -101,10 +101,11 @@ const Mahasiswa = () => {
           setState((prev) => ({ ...prev, tahunmasuk: e.target.value }))
         }
       />
-      <Select mt="4" align={"start"} width={"400px"}>
-        {dosen.map((it)=> <option value={it.nama}  onChange={(e) =>
-          setDosen((prev) => ({ ...prev, pembimbing1: { nip: e.target.value, nama: e.target.value }}))
-        }>{it.nama}</option>)}
+      <Select mt="4" align={"start"} width={"400px"} onChange={function (e) {
+        return setState((prev) => ({ ...prev, pembimbing1: { nip: e.target.value, nama: e.target.value } }));
+      }
+        }>
+        {dosen.map((it)=> <option value={it.nip +" "+ it.nama}>{it.nip +" "+ it.nama}</option>)}
       </Select>
       <InputWihtText
         title="Email"
