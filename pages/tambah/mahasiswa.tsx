@@ -2,6 +2,7 @@ import { Container, Button, useToast, Select } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { InputWihtText } from "../../component/InputText";
 import { db, auth } from "../../config/firebase";
+import router from "next/router";
 
 const Mahasiswa = () => {
   const toast = useToast();
@@ -49,6 +50,7 @@ const Mahasiswa = () => {
 
   const onSubmit = async () => {
     setLoading(true);
+    console.log(state)
     try {
       await db
         .doc(`data-mahasiswa/${state.nim}`)
@@ -71,15 +73,25 @@ const Mahasiswa = () => {
             return;
           }
         });
+        router.push(`/datamahasiswa`)
     } catch (error: any) {
       setLoading(false);
       toast({
-        description: "Gagal tambahkan data",
+        description: error.code,
         status: "error",
       });
     }
     setLoading(false);
   };
+
+  const onChangeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if(e.target.value !== "Pilih Pembimbing 1"){
+      const parseJosn = JSON.parse(e.target.value)
+       setState((prev) => ({ ...prev, pembimbing1: { nip: parseJosn.nip, nama: parseJosn.nama } }));
+    }
+    return;
+  }
+
   return (
     <Container maxW={"container.xl"}>
       <InputWihtText
@@ -101,11 +113,8 @@ const Mahasiswa = () => {
           setState((prev) => ({ ...prev, tahunmasuk: e.target.value }))
         }
       />
-      <Select mt="4" align={"start"} width={"400px"} onChange={function (e) {
-        return setState((prev) => ({ ...prev, pembimbing1: { nip: e.target.value, nama: e.target.value } }));
-      }
-        }>
-        {dosen.map((it)=> <option value={it.nip +" "+ it.nama}>{it.nip +" "+ it.nama}</option>)}
+      <Select mt="4" align={"start"} width={"400px"} onChange={(e) => onChangeValue(e)} placeholder='Pilih Pembimbing 1' >
+        {dosen.map((it,id)=> <option key={id} defaultValue={JSON.stringify(it)} value={JSON.stringify(it)}>{it.nip +" "+it.nama}</option>)}
       </Select>
       <InputWihtText
         title="Email"

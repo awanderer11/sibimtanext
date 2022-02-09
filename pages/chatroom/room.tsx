@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../../config/firebase";
-import { Container, Button, useToast, Box, HStack, Avatar, VStack } from "@chakra-ui/react";
+import { Container, Button, useToast, Box, HStack, Avatar, VStack, Textarea } from "@chakra-ui/react";
 import { InputWihtText } from "../../component/InputText";
 
 const Room = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState<any[]>([]);
+  const [state1, setState1] = useState<any[]>([]);
   const [valMessage, setValMessage] = useState("")
+  const [valMessage1, setValMessage1] = useState("")
  
   useEffect(() => {
     async function fetch() {
@@ -23,14 +25,14 @@ const Room = () => {
   }, []);
   
 
-  const onSubmit = async (nip: string) => {
+  const onSubmit = async () => {
     setLoading(true);
     await db
       .collection(`chat`)
       .add({ username: auth.currentUser?.email , message: valMessage})
       .then(() => {
         toast({
-          description: "Update Data Berhasil",
+          description: "Post Berhasil",
           status: "success",
         });
         setLoading(false);
@@ -41,35 +43,50 @@ const Room = () => {
     setLoading(false);
   };
 
+  
+
   return (
     <Container maxW={"container.xl"}>
-        <InputWihtText
-        title="Username"
+      <Textarea 
         value={valMessage}
         onChange={(e) => setValMessage(e.target.value)}
-      />
+        placeholder=''
+        size='sm'
+        height={"200px !important"}
+        width={"50%"}/>
+        <div>
+        <VStack align={'start'}>
       <Button
         colorScheme={"green"}
         color={"white"}
         mt={2}
         isLoading={loading}
-        onClick={() => onSubmit("state")}
+        onClick={() => onSubmit()}
       >
         Post
       </Button>
-
+      </VStack>
+      </div>
       {state.map((it)=> (
-      <Box mt={2} bg='white' w='50%' p={4} color='white'>
-        
+      <Box mt={2} bg='white' w='50%' p={4} color='black'>
            <HStack>
              <Avatar  src={it.username} name={it.username} />
               <VStack align={'start'}>
-              <Box bg='blue'>{it.username}</Box>
-              <Box bg='grey'>{it.message}</Box>
-
+              <Box bg='#F7FAFC'>{it.username}</Box>
+              <Box bg='#F7FAFC'>{it.message}</Box>
+              <Button 
+                 colorScheme={"green"}
+                  color={"white"}
+                  mt={2}
+                  isLoading={loading}
+                  onClick={() => onSubmit()}
+                  >
+                    Reply
+                 </Button>
               </VStack>
+              
            </HStack>
-   
+          
        </Box>
              ))}
     </Container>

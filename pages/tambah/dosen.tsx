@@ -2,6 +2,7 @@ import { Container, Button, useToast } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { InputWihtText } from "../../component/InputText";
 import { db } from "../../config/firebase";
+import router from "next/router";
 
 const Dosen = () => {
   const toast = useToast();
@@ -17,8 +18,6 @@ const Dosen = () => {
     roles: "dosen",
     created_at: Date.now().toString(),
     updated_at: Date.now().toString(),
-    
-    
   });
 
   const onSubmit = async () => {
@@ -45,6 +44,7 @@ const Dosen = () => {
             return;
           }
         });
+        router.push(`/datadosen`)
     } catch (error: any) {
       setLoading(false);
       toast({
