@@ -92,7 +92,7 @@ const Room = () => {
         
       {state.map((it)=> (
       <Box mt={2} bg='white' p={4} color='black'>
-           <HStack>
+           <HStack align={'start'}>
              <Avatar  src={it.username} name={it.username} />
               <VStack align={'start'}>
               <Box bg='#F7FAFC'>{it.username}</Box>

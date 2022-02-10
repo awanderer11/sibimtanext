@@ -7,7 +7,6 @@ import {
     Heading,
     useToast
   } from "@chakra-ui/react";
-  import Router from "next/router";
   import React, { useState } from "react";
   import { auth, db } from "../config/firebase";
   
@@ -20,13 +19,54 @@ import {
   
     const onLogin = async () => {
       setLoading(true);
+
      await db.collection("data-mahasiswa").where("email", "==", email).get().then((v) => {
        if(v.empty) {
-        toast({
-          description: "Email tidak terdaftar",
-          status: "error",
-        });
-        return;
+        db.collection('/data-dosen').where('email', '==', email).get().then((vd) => {
+          if(vd.empty){
+            toast({
+              description: "Email tidak terdaftar",
+              status: "error",
+            });
+            return;
+          } else{
+          let emails = ''
+          let nips  = ''
+          let passwords = ''
+          let isLogin = false
+            vd.forEach((b) => {
+            emails = b.data().email,
+           passwords = b.data().password
+           isLogin = b.data().isLogin
+           nips = b.data().nip
+            })
+
+            if(passowrd === passwords) {
+              if(!isLogin) {
+                auth
+                 .createUserWithEmailAndPassword(email, passowrd)
+                 .then((response) => {
+                  console.log(response)
+                 })
+               db.doc(`/data-dosen/${nips}`).update({isLogin: true})
+               .catch((error) => {
+                return { error };
+               });
+              }else if(isLogin){
+                auth.signInWithEmailAndPassword(email, passowrd);
+              }
+             }
+             else{
+               toast({
+                 description:"Password Salah!",
+                 status:"error",
+                 
+               })
+             }
+          }
+          
+      })
+      return;
        }  
        else{
          let emails = ''
