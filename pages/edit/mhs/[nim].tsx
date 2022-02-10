@@ -10,7 +10,14 @@ const EditMahasiswa = () => {
   const [state, setState] = useState({
     nim: "",
     nama: "",
+    tanggallahir: "",
     tahunmasuk: "",
+    email: "",
+    kontak: "",
+    alamat: "",
+    jeniskelamin: "",
+    agama: "",
+    updated_at: Date.now().toString(),
   });
 
   useEffect(() => {
@@ -48,7 +55,7 @@ const EditMahasiswa = () => {
 
   return (
     <Container maxW={"container.xl"}>
-        <InputWihtText
+     <InputWihtText
         title="NIM"
         value={state.nim}
         onChange={(e) => setState((prev) => ({ ...prev, nim: e.target.value }))}
@@ -61,10 +68,52 @@ const EditMahasiswa = () => {
         }
       />
       <InputWihtText
-        title="Kontak"
+        title="Tanggal Lahir"
+        value={state.tanggallahir}
+        onChange={(e) =>
+          setState((prev) => ({ ...prev, tanggallahir: e.target.value }))
+        }
+      />
+      <InputWihtText
+        title="Tahun Masuk"
         value={state.tahunmasuk}
         onChange={(e) =>
           setState((prev) => ({ ...prev, tahunmasuk: e.target.value }))
+        }
+      />
+      <InputWihtText
+        title="Email"
+        value={state.email}
+        onChange={(e) =>
+          setState((prev) => ({ ...prev, email: e.target.value }))
+        }
+      />
+      <InputWihtText
+        title="Alamat"
+        value={state.alamat}
+        onChange={(e) =>
+          setState((prev) => ({ ...prev, alamat: e.target.value }))
+        }
+      />
+      <InputWihtText
+        title="Kontak"
+        value={state.kontak}
+        onChange={(e) =>
+          setState((prev) => ({ ...prev, kontak: e.target.value }))
+        }
+      />
+      <InputWihtText
+        title="Jenis Kelamin"
+        value={state.jeniskelamin}
+        onChange={(e) =>
+          setState((prev) => ({ ...prev, jeniskelamin: e.target.value }))
+        }
+      />
+      <InputWihtText
+        title="Agama"
+        value={state.agama}
+        onChange={(e) =>
+          setState((prev) => ({ ...prev, agama: e.target.value }))
         }
       />
       <Button

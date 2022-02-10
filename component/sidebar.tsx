@@ -169,6 +169,41 @@ import {
               </>
           )}
 
+          {roles === 'dosen' && (
+              <>
+          <NavItem icon={BsFillGridFill} link="/">
+            Dashboard
+          </NavItem>
+          <Divider />
+          <NavItem icon={BsBookHalf} link="/bimbinganjudul">
+            Bimbingan Judul
+          </NavItem>
+          <Divider />
+          <NavItem icon={BsFillBookmarkFill} link="/proposal">
+            Proposal
+          </NavItem>
+          <NavItem icon={BsFillBookmarkFill} link="/hasil">
+            Hasil
+          </NavItem>
+          <NavItem icon={BsFillBookmarkFill} link="/tutup">
+            Tutup
+          </NavItem>
+          <Divider />
+          <NavItem icon={BsFillChatSquareTextFill} link="/laporan">
+            Laporan
+          </NavItem>
+          <Divider />
+          <NavItem icon={BsFillBookFill} link="/view/judulskripsi">
+            Judul Skripsi
+          </NavItem>
+          <Divider />
+          <NavItem icon={BsFillBookmarksFill} link="/administrasi">
+            Administrasi
+          </NavItem>
+          <Divider />
+              </>
+          )}    
+
           {roles === 'mahasiswa' && (
           <>
             <NavItem icon={BsFillGridFill} link="/">
@@ -179,33 +214,25 @@ import {
               My Profile
             </NavItem>
             <Divider />
-            <NavItem icon={FiUsers} link="/datamahasiswa">
-              Data Mahasiswa
-            </NavItem>
-            <Divider />
-            <NavItem icon={BsFillChatLeftQuoteFill} link="/pengajuanjudul">
+            <NavItem icon={BsFillChatLeftQuoteFill} onClick={() => router.push(`/mahasiswa/pengajuanjudul/${nim}`)}>
               Pengajuan Judul
             </NavItem>
             <Divider />
-            <NavItem icon={BsBookHalf} link="/bimbinganjudul">
-              Bimbingan Judul
-            </NavItem>
-            <Divider />
-            <NavItem icon={BsFillBookmarkFill} link="/proposal">
+            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/proposal/${nim}`)}>
               Proposal
             </NavItem>
-            <NavItem icon={BsFillBookmarkFill} link="/hasil">
+            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/hasil/${nim}`)}>
               Hasil
             </NavItem>
-            <NavItem icon={BsFillBookmarkFill} link="/tutup">
+            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/tutup/${nim}`)}>
               Tutup
             </NavItem>
             <Divider />
-            <NavItem icon={BsFillChatSquareTextFill} link="/laporan">
+            <NavItem icon={BsFillChatSquareTextFill} onClick={() => router.push(`/mahasiswa/laporan/${nim}`)}>
               Laporan
             </NavItem>
             <Divider />
-            <NavItem icon={BsFillBookFill} link="/judulskripsi">
+            <NavItem icon={BsFillBookFill} link="/view/judulskripsi">
               Judul Skripsi
             </NavItem>
             <Divider />

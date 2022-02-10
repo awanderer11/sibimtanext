@@ -56,15 +56,14 @@ const PengajuanJudul = () => {
               <Td>{id + 1}</Td>
               <Td>{it.nim}</Td>
               <Td>{it.nama}</Td>
-              <Td><IconButton
+              <Td>{it.judul.judul}</Td>
+              {/* <Td><IconButton
                     aria-label="icon"
                     icon={<FiEdit2 />}
                     onClick={() => router.push(`/pengajuan/${it.nim}`)}
-                  /></Td>
+                  /></Td> */}
               <Td>{it.pembimbing1.nama}</Td>
               <Td>{it.pembimbing2.nama}</Td>
-              <Td>{it.bantuan}</Td>
-              
             </Tr>
           ))}
         </Tbody>

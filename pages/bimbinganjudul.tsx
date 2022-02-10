@@ -59,14 +59,14 @@ const BimbinganJudul = () => {
               <Td>{it.nim}</Td>
               <Td>{it.nama}</Td>
               <Td>{it.judul.judul}</Td>
-              <Td>{new Date(it.tanggalpengajuan / 1000).toLocaleDateString("id-ID")}</Td>
-              <Td>{new Date(it.tanggalselesai /1000).toLocaleDateString()}</Td>
-              <Td>{new Date(it.selesaita /1000).toLocaleDateString()}</Td>
+              <Td>{it.pengajuanjudul}</Td>
+              <Td>{it.tanggalselesai}</Td>
+              <Td>{it.selesaita}</Td>
               <Td>{it.status}</Td>
               <Td><IconButton
                     aria-label="icon"
                     icon={<FiEdit2 />}
-                    onClick={() => router.push(`/chatroom/room`)}
+                    onClick={() => router.push(`/bimbingan/${it.nim}`)}
                   /></Td>
               
             </Tr>

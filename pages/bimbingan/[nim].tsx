@@ -26,7 +26,7 @@ const Room = () => {
         .doc(`data-mahasiswa/${router.query.nim}`)
         .get()
         .then((docs) => {
-          setState({ ...(docs.data() as any) });
+          setMhs({ ...(docs.data() as any) });
         })
         .catch((e) => {
           console.log(e);
@@ -37,7 +37,7 @@ const Room = () => {
   
   useEffect(() => {
     async function fetch() {
-      db.collection('chat').onSnapshot((v) => {
+      db.doc(`data-mahasiswa/${router.query.nim}`).collection('chat').orderBy("created_at", "desc" ).onSnapshot((v) => {
         const data: any[]= []
         v.forEach((vv) => {
           data.push({...vv.data()})
@@ -50,9 +50,9 @@ const Room = () => {
 
   const onSubmit = async () => {
     setLoading(true);
-    await db
+    await db.doc(`data-mahasiswa/${router.query.nim}`)
       .collection(`chat`)
-      .add({ username: auth.currentUser?.email , message: valMessage,})
+      .add({ username: auth.currentUser?.email , message: valMessage, created_at:Date.now().toString(),})
       .then(() => {
         toast({
           description: "Post Berhasil",
@@ -90,7 +90,7 @@ const Room = () => {
       </VStack>
       </div>
         
-      {/* {state.map((it)=> (
+      {state.map((it)=> (
       <Box mt={2} bg='white' p={4} color='black'>
            <HStack>
              <Avatar  src={it.username} name={it.username} />
@@ -109,29 +109,29 @@ const Room = () => {
               </VStack>
            </HStack>
        </Box>
-             ))} */}
+             ))}
     </Container>
     <Container>
         <Box> 
         <InputGroup>
         <InputLeftAddon children='Nim' />
-        <Input type='tel' placeholder='' disabled />
+        <Input type='tel' placeholder='' disabled value={mhs.nim} />
         </InputGroup>
         <InputGroup mt={2}>
         <InputLeftAddon children='Nama' />
-        <Input type='tel' placeholder='' disabled />
+        <Input type='tel' placeholder='' disabled value={mhs.nama}/>
         </InputGroup>
         <InputGroup mt={2}>
         <InputLeftAddon children='Kontak' />
-        <Input type='tel' placeholder='' disabled />
+        <Input type='tel' placeholder='' disabled value={mhs.kontak} />
         </InputGroup>
         <InputGroup mt={2}>
         <InputLeftAddon children='Email' />
-        <Input type='tel' placeholder='' disabled />
+        <Input type='tel' placeholder='' disabled value={mhs.email} />
         </InputGroup>
         <InputGroup mt={2}>
         <InputLeftAddon children='Tahun Masuk' />
-        <Input type='tel' placeholder='' disabled />
+        <Input type='tel' placeholder='' disabled value={mhs.tahunmasuk} />
         </InputGroup>
         <InputGroup mt={2}>
         <InputLeftAddon children='Pembimbing 2' />
@@ -143,9 +143,10 @@ const Room = () => {
         </InputGroup>
         <InputWihtText
         title="Judul"
+        value={mhs.judul.judul}
          />
          <Text mt="2">Abstrak</Text>
-         <Textarea>
+         <Textarea value={mhs.judul.abstrak}>
 
          </Textarea>
          <Button mt={2}>Terima Judul</Button>
