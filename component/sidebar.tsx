@@ -175,6 +175,10 @@ import {
             Dashboard
           </NavItem>
           <Divider />
+          <NavItem icon={FiUsers} onClick={() => router.push(`/myprofile/dosen/${nip}`)}>
+              My Profile
+            </NavItem>
+            <Divider />
           <NavItem icon={BsBookHalf} link="/bimbinganjudul">
             Bimbingan Judul
           </NavItem>
@@ -248,6 +252,7 @@ import {
             w={200}
             onClick={() => {
               auth.signOut();
+              router.push(`/`)
             }}
           >
             Logout

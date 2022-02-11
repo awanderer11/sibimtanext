@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../../config/firebase";
-import { Container, Button, useToast, Box, HStack, Avatar, VStack, Textarea, SimpleGrid, Input, InputGroup, InputLeftAddon, Select, Text } from "@chakra-ui/react";
-import { InputWihtText } from "../../component/InputText";
+import { Container, Button, useToast, Box, HStack, Avatar, VStack, Textarea, SimpleGrid, Input, InputGroup, InputLeftAddon, Select, IconButton } from "@chakra-ui/react";
+import { FiDownload } from "react-icons/fi";
 import router from "next/router";
 
 const Room = () => {
@@ -9,6 +9,7 @@ const Room = () => {
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState<any[]>([]);
   const [valMessage, setValMessage] = useState("");
+  const [dosen, setDosen] = useState<any[]>([]);
   const [mhs, setMhs] = useState({
     nim: "",
     nama: "",
@@ -16,9 +17,20 @@ const Room = () => {
     kontak: "",
     tahunmasuk: "",
     pembimbing2: {"nip":"","nama": ""},
-    judul: {"abstrak":"","judul": ""},
+    judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
   });
-
+  useEffect(() => {
+    async function fetch() {
+      db.collection('data-dosen').onSnapshot((v) => {
+        const data: any[]= []
+        v.forEach((vv) => {
+          data.push({...vv.data()})
+        })
+        setDosen(data)
+      })
+    }
+    fetch();
+  }, []);
 
   useEffect(() => {
     async function fetch() {
@@ -59,22 +71,48 @@ const Room = () => {
           status: "success",
         });
         setLoading(false);
+        setValMessage("");
       })
       .catch((e) => {
         console.log(e);
       });
     setLoading(false);
   };
+
+  const onChangeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    if(e.target.value !== "Pilih Pembimbing 2"){
+      const parseJosn = JSON.parse(e.target.value)
+       setMhs((prev) => ({ ...prev, pembimbing2: { nip: parseJosn.nip, nama: parseJosn.nama } }));
+    }
+    return;
+  }
+  const onSubmitJudul = async (nim: string) => {
+    setLoading(true);
+    await db
+      .doc(`data-mahasiswa/${nim}`)
+      .update({...mhs, pembimbing2:{nip: mhs.pembimbing2.nip, nama: mhs.pembimbing2.nama}})
+      .then(() => {
+        toast({
+          description: "Update Data Berhasil",
+          status: "success",
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    setLoading(false);
+  };
+
   return (
     <SimpleGrid columns={2} spacing={10}>
-
-    <Container maxW={"container.xl"}>
-      <Textarea 
+    <Container maxW={"container.xl"}>   
+    <Textarea 
         value={valMessage}
         onChange={(e) => setValMessage(e.target.value)}
-        placeholder=''
-        size='sm'
-        height={"200px !important"}
+        size='lg'
+        mt={2}
+        height={"50px !important"}
         />
         <div>
         <VStack align={'end'}>
@@ -85,31 +123,40 @@ const Room = () => {
         isLoading={loading}
         onClick={() => onSubmit()}
       >
-        Post
+        Send
       </Button>
       </VStack>
       </div>
+      {state.map((it)=>{
+        if(it.username === auth.currentUser?.email){
+         return (
+            <Box mt={2} bg='white' p={2} color='black'>
+                    <VStack align={'end'}>
+                 <HStack align={'end'}>
+                    <VStack align={'end'}>
+                    <Box bg='#F7FAFC'>{it.username}</Box>
+                    <Box bg='#F7FAFC'>{it.message}</Box>
+                    </VStack>
+                   <Avatar  src={it.username} name={it.username} />
+                 </HStack>
+                  </VStack>
+             </Box>
+          )
+        } else{
+         return (
+            <Box  mt={2} bg='white' p={2} color='black'>
+                 <HStack align={'end'}>
+                   <Avatar  src={it.username} name={it.username} />
+                    <VStack align={'start'}>
+                    <Box bg='#F7FAFC'>{it.username}</Box>
+                    <Box bg='#F7FAFC'>{it.message}</Box>
+                    </VStack>
+                 </HStack>
+             </Box>
+                   )
+        }
+      })}
         
-      {state.map((it)=> (
-      <Box mt={2} bg='white' p={4} color='black'>
-           <HStack align={'start'}>
-             <Avatar  src={it.username} name={it.username} />
-              <VStack align={'start'}>
-              <Box bg='#F7FAFC'>{it.username}</Box>
-              <Box bg='#F7FAFC'>{it.message}</Box>
-              <Button 
-                 colorScheme={"green"}
-                  color={"white"}
-                  mt={2}
-                  isLoading={loading}
-                  onClick={() => onSubmit()}
-                  >
-                    Reply
-                 </Button>
-              </VStack>
-           </HStack>
-       </Box>
-             ))}
     </Container>
     <Container>
         <Box> 
@@ -135,22 +182,33 @@ const Room = () => {
         </InputGroup>
         <InputGroup mt={2}>
         <InputLeftAddon children='Pembimbing 2' />
-        <Select placeholder='Pilih Pembimbing 2'>
-        <option value='option1'>Option 1</option>
-        <option value='option2'>Option 2</option>
-        <option value='option3'>Option 3</option>
+        <Select onChange={(e) => onChangeValue(e)} placeholder='Pilih Pembimbing 2' >
+        {dosen.map((it,id)=> <option key={id} defaultValue={JSON.stringify(it)} value={JSON.stringify(it)}>{it.nip +" "+it.nama}</option>)}
         </Select>
         </InputGroup>
-        <InputWihtText
-        title="Judul"
-        value={mhs.judul.judul}
-         />
-         <Text mt="2">Abstrak</Text>
-         <Textarea value={mhs.judul.abstrak}>
-
-         </Textarea>
-         <Button mt={2}>Terima Judul</Button>
-        </Box>
+        <InputGroup mt={2}>
+        <InputLeftAddon children='Judul' />
+        <Input type='tel' placeholder='' disabled  value={mhs.judul.judul} />
+        </InputGroup>
+      <Box>
+      <a target="_blank" href={mhs.judul.url} rel="noopener noreferrer"> 
+      <IconButton
+      mt={2}
+      aria-label="icon"
+      icon={ <FiDownload />}
+        />
+      </a>
+      </Box>
+      <Button
+        colorScheme={"green"}
+        color={"white"}
+        mt={2}
+        isLoading={loading}
+        onClick={() => onSubmitJudul(mhs.nim)}
+      >
+        Terima Judul
+      </Button>
+      </Box>
 
     </Container>
     </SimpleGrid>

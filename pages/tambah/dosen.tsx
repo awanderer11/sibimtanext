@@ -16,6 +16,7 @@ const Dosen = () => {
     password: "",
     isLogin: false,
     roles: "dosen",
+    img_url:"",
     created_at: Date.now().toString(),
     updated_at: Date.now().toString(),
   });

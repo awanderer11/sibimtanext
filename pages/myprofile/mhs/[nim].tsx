@@ -1,11 +1,16 @@
-import { Container, Button, useToast } from "@chakra-ui/react";
+import { Container, Button, useToast,Text, Image } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { InputWihtText } from "../../../component/InputText";
-import { db, auth } from "../../../config/firebase";
+import { db, FirebaseApp } from "../../../config/firebase";
 import router from "next/router";
+import ImagePick from "../../../component/imagepick";
 
 const MyProfile = () => {
   const toast = useToast();
+  const [preview, setPreview] = useState<any>(
+    "https://via.placeholder.com/150"
+  );
+  const [selectedFile, setSelectedFile] = useState<any>(undefined);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
     nim: "",
@@ -17,7 +22,8 @@ const MyProfile = () => {
     alamat: "",
     jeniskelamin: "",
     agama: "",
-    updated_at: Date.now().toString(),
+    img_url:"",
+    updated_at: new Date().toISOString().substring(0, 10),
   });
   useEffect(() => {
     async function fetch() {
@@ -34,11 +40,39 @@ const MyProfile = () => {
     fetch();
   }, []);
 
+  const onSelectFile = (e: (EventTarget & HTMLInputElement) | null) => {
+    if (!e?.files) return;
+    if (e.files[0]) {
+      setSelectedFile(e.files[0]);
+      const reader = new FileReader();
+      reader.addEventListener("load", () => {
+        state.img_url="";
+        setPreview(reader.result);
+      });
+      reader.readAsDataURL(e.files[0]);
+    }
+  };
+
 const onSubmit = async (nim: string) => {
     setLoading(true);
+    const metadata = {
+      contentType: "image/jpeg",
+    };
+
+    const snapshot = await FirebaseApp.storage()
+      .ref()
+      .child(
+        `/images/${new Date().toISOString().substring(0, 10)}-${
+          state.nim
+        }`
+      )
+      .put(selectedFile, metadata);
+
+     const imageUrl = await snapshot.ref.getDownloadURL();
+
     await db
       .doc(`data-mahasiswa/${nim}`)
-      .update(state)
+      .update({...state, img_url: imageUrl,})
       .then(() => {
         toast({
           description: "Update Data Berhasil",
@@ -55,6 +89,11 @@ const onSubmit = async (nim: string) => {
 
   return (
     <Container maxW={"container.xl"}>
+      <Text>FOTO</Text>
+      <ImagePick
+          imageUrl={state.img_url == "" ? preview : state.img_url }
+          onChange={(e) => onSelectFile(e.target)}
+        />
       <InputWihtText
         title="NIM"
         value={state.nim}

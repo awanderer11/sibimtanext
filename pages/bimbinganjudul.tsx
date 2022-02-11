@@ -12,7 +12,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import router from "next/router";
-import { FiEdit2 } from "react-icons/fi";
+import { FiLogIn } from "react-icons/fi";
 import { db } from "../config/firebase";
 
 const BimbinganJudul = () => {
@@ -59,13 +59,13 @@ const BimbinganJudul = () => {
               <Td>{it.nim}</Td>
               <Td>{it.nama}</Td>
               <Td>{it.judul.judul}</Td>
-              <Td>{it.pengajuanjudul}</Td>
-              <Td>{it.tanggalselesai}</Td>
+              <Td>{it.judul.created_at}</Td>
+              <Td>{it.judul.updated_at}</Td>
               <Td>{it.selesaita}</Td>
               <Td>{it.status}</Td>
               <Td><IconButton
                     aria-label="icon"
-                    icon={<FiEdit2 />}
+                    icon={<FiLogIn />}
                     onClick={() => router.push(`/bimbingan/${it.nim}`)}
                   /></Td>
               

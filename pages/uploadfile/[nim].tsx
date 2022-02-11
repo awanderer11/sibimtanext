@@ -1,11 +1,11 @@
-import { Container, Button, useToast } from "@chakra-ui/react";
+import { Container, Button, useToast,Text, Image } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { InputWihtText } from "../../../component/InputText";
-import { db, FirebaseApp } from "../../../config/firebase";
+import { db, FirebaseApp } from "../../config/firebase";
 import router from "next/router";
-import ImagePick from "../../../component/imagepick";
+import FilePick from "../../component/fiepick";
+import { InputWihtText } from "../../component/InputText";
 
-const MyProfile = () => {
+const UploadFile = () => {
   const toast = useToast();
   const [preview, setPreview] = useState<any>(
     "https://via.placeholder.com/150"
@@ -13,17 +13,13 @@ const MyProfile = () => {
   const [selectedFile, setSelectedFile] = useState<any>(undefined);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
-    nip: "",
-    nama: "",
-    kontak: "",
-    email: "",
-    img_url:"",
-    updated_at: Date.now().toString(),
+    nim:"",
+    judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
   });
   useEffect(() => {
     async function fetch() {
       await db
-        .doc(`data-dosen/${router.query.nip}`)
+        .doc(`data-mahasiswa/${router.query.nim}`)
         .get()
         .then((docs) => {
           setState({ ...(docs.data() as any) });
@@ -34,42 +30,42 @@ const MyProfile = () => {
     }
     fetch();
   }, []);
+
   const onSelectFile = (e: (EventTarget & HTMLInputElement) | null) => {
     if (!e?.files) return;
     if (e.files[0]) {
       setSelectedFile(e.files[0]);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        state.img_url="";
         setPreview(reader.result);
       });
       reader.readAsDataURL(e.files[0]);
     }
   };
 
-const onSubmit = async (nip: string) => {
+const onSubmit = async (nim: string) => {
     setLoading(true);
     const metadata = {
-      contentType: "image/jpeg",
+      contentType: "application/docx",
     };
 
     const snapshot = await FirebaseApp.storage()
       .ref()
       .child(
-        `/images/${new Date().toISOString().substring(0, 10)}-${
-          state.nip
-        }`
+        `/file/${new Date().toISOString().substring(0, 7)}-${
+          state.nim
+        }.docx`
       )
       .put(selectedFile, metadata);
 
      const imageUrl = await snapshot.ref.getDownloadURL();
 
     await db
-      .doc(`data-dosen/${nip}`)
-      .update({...state, img_url: imageUrl,})
+      .doc(`data-mahasiswa/${nim}`)
+      .update({...state, judul:{judul: state.judul.judul, created_at:new Date().toLocaleDateString().substring(0, 10), updated_at:"", url: imageUrl }})
       .then(() => {
         toast({
-          description: "Update Data Berhasil",
+          description: "Upload Judul Berhasil",
           status: "success",
         });
         setLoading(false);
@@ -83,41 +79,20 @@ const onSubmit = async (nip: string) => {
 
   return (
     <Container maxW={"container.xl"}>
-      <ImagePick
-          imageUrl={state.img_url == "" ? preview : state.img_url }
+         <InputWihtText
+        title="Judul"
+        value={state.judul.judul}
+        onChange={(e) => setState((prev) => ({ ...prev, judul: {judul: e.target.value, created_at: state.judul.created_at, updated_at: state.judul.updated_at, url: state.judul.url}}))}
+      />
+      <Text mt={4}>Upload Berkas</Text>
+      <FilePick
           onChange={(e) => onSelectFile(e.target)}
         />
-      <InputWihtText
-        title="NIP"
-        value={state.nip}
-        onChange={(e) => setState((prev) => ({ ...prev, nip: e.target.value }))}
-      />
-      <InputWihtText
-        title="Nama"
-        value={state.nama}
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, nama: e.target.value }))
-        }
-      />
-      <InputWihtText
-        title="Kontak"
-        value={state.kontak}
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, kontak: e.target.value }))
-        }
-      />
-      <InputWihtText
-        title="Email"
-        value={state.email}
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, email: e.target.value }))
-        }
-      />
       <Button
         colorScheme={"green"}
         color={"white"}
-        mt={10}
-        onClick={() => onSubmit(state.nip)}
+        mt={4}
+        onClick={() => onSubmit(state.nim)}
         isLoading={loading}
       >
         Simpan
@@ -126,4 +101,4 @@ const onSubmit = async (nip: string) => {
   );
 };
 
-export default MyProfile;
+export default UploadFile;

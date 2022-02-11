@@ -11,7 +11,7 @@ import {
     useToast,
   } from "@chakra-ui/react";
   import React, { useEffect, useState } from "react";
-  import { FiEdit2 } from "react-icons/fi";
+  import { FiLogIn, FiUpload } from "react-icons/fi";
   import router from "next/router";
   import { db } from "../../../config/firebase";
   
@@ -19,10 +19,10 @@ import {
     const [state, setState] = useState({
         nim: "",
         nama: "",
-        judul: "",
+        judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
         pembimbing1: {"nip":"","nama": ""},
         pembimbing2: {"nip":"","nama": ""},
-        updated_at: Date.now().toString(),
+        
       });
     const toast = useToast();
     useEffect(() => {
@@ -39,7 +39,6 @@ import {
         }
         fetch();
       }, []);
-  
     if (!state) return <Text>Loading...</Text>;
   
     return (
@@ -52,20 +51,26 @@ import {
               <Th>Judul</Th>
               <Th>Pembimbing 1</Th>
               <Th>Pembimbing 2</Th>
+              <Th>Masuk</Th>
             </Tr>
           </Thead>
           <Tbody>
               <Tr>
                 <Td>{state.nim}</Td>
                 <Td>{state.nama}</Td>
-                <Td><IconButton
+               
+               <Td>{state.judul.judul === "" ? <IconButton
                       aria-label="icon"
-                      icon={<FiEdit2 />}
-                      onClick={() => router.push(`/pengajuan/${state.nim}`)}
-                    /></Td>
+                      icon={<FiUpload />}
+                      onClick={() => router.push(`/uploadfile/${state.nim}`)}
+                    /> : state.judul.judul }</Td>
                 <Td>{state.pembimbing1.nama}</Td>
                 <Td>{state.pembimbing2.nama}</Td>
-                
+                <Td><IconButton
+                      aria-label="icon"
+                      icon={ <FiLogIn />}
+                      onClick={() => {state.judul.judul === "" ? "" : router.push(`/pengajuan/${state.nim}`) }}
+                    /></Td>
               </Tr>
           </Tbody>
         </Table>

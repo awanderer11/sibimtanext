@@ -19,7 +19,6 @@ import {
   
     const onLogin = async () => {
       setLoading(true);
-
      await db.collection("data-mahasiswa").where("email", "==", email).get().then((v) => {
        if(v.empty) {
         db.collection('/data-dosen').where('email', '==', email).get().then((vd) => {
@@ -40,7 +39,6 @@ import {
            isLogin = b.data().isLogin
            nips = b.data().nip
             })
-
             if(passowrd === passwords) {
               if(!isLogin) {
                 auth

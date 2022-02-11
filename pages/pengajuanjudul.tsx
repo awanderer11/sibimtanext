@@ -11,8 +11,6 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { FiEdit2 } from "react-icons/fi";
-import router from "next/router";
 import { db } from "../config/firebase";
 
 const PengajuanJudul = () => {
@@ -46,22 +44,15 @@ const PengajuanJudul = () => {
             <Th>Judul</Th>
             <Th>Pembimbing 1</Th>
             <Th>Pembimbing 2</Th>
-            
           </Tr>
         </Thead>
         <Tbody>
           {state.map((it, id) => (
             <Tr key={id}>
-              
               <Td>{id + 1}</Td>
               <Td>{it.nim}</Td>
               <Td>{it.nama}</Td>
               <Td>{it.judul.judul}</Td>
-              {/* <Td><IconButton
-                    aria-label="icon"
-                    icon={<FiEdit2 />}
-                    onClick={() => router.push(`/pengajuan/${it.nim}`)}
-                  /></Td> */}
               <Td>{it.pembimbing1.nama}</Td>
               <Td>{it.pembimbing2.nama}</Td>
             </Tr>
