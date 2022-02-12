@@ -63,6 +63,24 @@ const AjukanJudul = () => {
     setLoading(false);
   };
 
+  const onSubmit = async (nim: string) => {
+    setLoading(true);
+    await db
+      .doc(`data-mahasiswa/${nim}`)
+      .update({...state, judul:{judul: state.judul.judul, created_at: state.judul.created_at, updated_at:new Date().toLocaleDateString().substring(0, 10)}})
+      .then(() => {
+        toast({
+          description: "Berhasil",
+          status: "success",
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    setLoading(false);
+  };
+
   return (
     <SimpleGrid columns={2} spacing={10}>
       <Container maxW={"container.xl"}>   
@@ -119,7 +137,8 @@ const AjukanJudul = () => {
     <Container maxW={"container.xl"}>
       <InputGroup mt={2}>
         <InputLeftAddon children='Judul' />
-        <Input type='tel' placeholder=''  value={state.judul.judul} />
+        <Input type='tel' placeholder=''  value={state.judul.judul} 
+        onChange={(e) => setState((prev) => ({ ...prev, judul: {judul: e.target.value, created_at: state.judul.created_at, updated_at: state.judul.updated_at, url: state.judul.url}}))}/>
         </InputGroup>
       <Box>
       <a target="_blank" href={state.judul.url} rel="noopener noreferrer"> 
@@ -137,6 +156,17 @@ const AjukanJudul = () => {
       onClick={() => router.push(`/uploadfile/${state.nim}`)}
                     />
       </Box>
+      <VStack align={'end'}>
+      <Button
+        colorScheme={"green"}
+        color={"white"}
+        mt={2}
+        isLoading={loading}
+        onClick={() => onSubmit(state.nim)}
+      >
+        Ajukan
+      </Button>
+      </VStack>
     </Container>
     </SimpleGrid>
   );

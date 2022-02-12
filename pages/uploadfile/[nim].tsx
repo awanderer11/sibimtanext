@@ -79,11 +79,11 @@ const onSubmit = async (nim: string) => {
 
   return (
     <Container maxW={"container.xl"}>
-         <InputWihtText
+         {/* <InputWihtText
         title="Judul"
         value={state.judul.judul}
         onChange={(e) => setState((prev) => ({ ...prev, judul: {judul: e.target.value, created_at: state.judul.created_at, updated_at: state.judul.updated_at, url: state.judul.url}}))}
-      />
+      /> */}
       <Text mt={4}>Upload Berkas</Text>
       <FilePick
           onChange={(e) => onSelectFile(e.target)}
@@ -95,7 +95,7 @@ const onSubmit = async (nim: string) => {
         onClick={() => onSubmit(state.nim)}
         isLoading={loading}
       >
-        Upload 
+        Simpan 
       </Button>
     </Container>
   );

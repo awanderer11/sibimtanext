@@ -69,7 +69,10 @@ import {
                 <Td><IconButton
                       aria-label="icon"
                       icon={ <FiLogIn />}
-                      onClick={() => {state.judul.judul === "" ? "" : router.push(`/pengajuan/${state.nim}`) }}
+                      onClick={() => {state.judul.url === "" ? toast({
+                        description: "Upload Berkas Judul!",
+                        status: "error",
+                      }) : router.push(`/pengajuan/${state.nim}`) }}
                     /></Td>
               </Tr>
           </Tbody>
