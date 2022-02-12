@@ -62,13 +62,12 @@ const BimbinganJudul = () => {
               <Td>{it.judul.created_at}</Td>
               <Td>{it.judul.updated_at}</Td>
               <Td>{it.selesaita}</Td>
-              <Td>{it.status}</Td>
+              <Td>{it.statusbimbingan}</Td>
               <Td><IconButton
                     aria-label="icon"
                     icon={<FiLogIn />}
                     onClick={() => router.push(`/bimbingan/${it.nim}`)}
                   /></Td>
-              
             </Tr>
           ))}
         </Tbody>

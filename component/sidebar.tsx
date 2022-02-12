@@ -122,7 +122,7 @@ import {
           color="gray.600"
           aria-label="Main Navigation"
         >
-          {roles === 'admin' && (
+          {auth.currentUser?.email === 'sibimta@email.com' && (
               <>
           <NavItem icon={BsFillGridFill} link="/">
             Dashboard

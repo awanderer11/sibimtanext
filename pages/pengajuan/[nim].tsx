@@ -62,24 +62,6 @@ const AjukanJudul = () => {
       });
     setLoading(false);
   };
-  const onSubmit = async (nim: string) => {
-    setLoading(true);
-    await db
-      .doc(`data-mahasiswa/${nim}`)
-      .update(state)
-      .then(() => {
-        toast({
-          description: "Update Data Berhasil",
-          status: "success",
-        });
-        setLoading(false);
-        
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setLoading(false);
-  };
 
   return (
     <SimpleGrid columns={2} spacing={10}>

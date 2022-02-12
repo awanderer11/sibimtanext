@@ -95,7 +95,7 @@ const onSubmit = async (nim: string) => {
         onClick={() => onSubmit(state.nim)}
         isLoading={loading}
       >
-        Simpan
+        Upload 
       </Button>
     </Container>
   );

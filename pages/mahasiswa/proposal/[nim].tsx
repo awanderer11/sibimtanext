@@ -1,6 +1,5 @@
 import {
     Box,
-    IconButton,
     Table,
     Tbody,
     Td,
@@ -11,7 +10,6 @@ import {
     useToast,
   } from "@chakra-ui/react";
   import React, { useEffect, useState } from "react";
-  import { FiEdit2 } from "react-icons/fi";
   import router from "next/router";
   import { db } from "../../../config/firebase";
   

@@ -16,6 +16,8 @@ const Room = () => {
     email: "",
     kontak: "",
     tahunmasuk: "",
+    statusbimbigan: "",
+    img_url:"",
     pembimbing2: {"nip":"","nama": ""},
     judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
   });
@@ -90,7 +92,7 @@ const Room = () => {
     setLoading(true);
     await db
       .doc(`data-mahasiswa/${nim}`)
-      .update({...mhs, pembimbing2:{nip: mhs.pembimbing2.nip, nama: mhs.pembimbing2.nama}})
+      .update({...mhs, pembimbing2:{nip: mhs.pembimbing2.nip, nama: mhs.pembimbing2.nama}, statusbimbingan:"bimbingan"})
       .then(() => {
         toast({
           description: "Update Data Berhasil",
@@ -180,12 +182,21 @@ const Room = () => {
         <InputLeftAddon children='Tahun Masuk' />
         <Input type='tel' placeholder='' disabled value={mhs.tahunmasuk} />
         </InputGroup>
+        <Box>
+        {
+          mhs.pembimbing2.nama !== "" ? 
+          <InputGroup mt={2}>
+          <InputLeftAddon children='Pembimbing 2' />
+          <Input type='tel' placeholder='' disabled value={mhs.pembimbing2.nama} />
+          </InputGroup>:
         <InputGroup mt={2}>
         <InputLeftAddon children='Pembimbing 2' />
         <Select onChange={(e) => onChangeValue(e)} placeholder='Pilih Pembimbing 2' >
         {dosen.map((it,id)=> <option key={id} defaultValue={JSON.stringify(it)} value={JSON.stringify(it)}>{it.nip +" "+it.nama}</option>)}
         </Select>
         </InputGroup>
+        }
+        </Box>
         <InputGroup mt={2}>
         <InputLeftAddon children='Judul' />
         <Input type='tel' placeholder='' disabled  value={mhs.judul.judul} />
