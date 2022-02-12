@@ -19,6 +19,7 @@ const Room = () => {
     statusbimbigan: "",
     img_url:"",
     pembimbing2: {"nip":"","nama": ""},
+    nim2:"",
     judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
   });
   useEffect(() => {
@@ -84,7 +85,7 @@ const Room = () => {
   const onChangeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if(e.target.value !== "Pilih Pembimbing 2"){
       const parseJosn = JSON.parse(e.target.value)
-       setMhs((prev) => ({ ...prev, pembimbing2: { nip: parseJosn.nip, nama: parseJosn.nama } }));
+       setMhs((prev) => ({ ...prev, pembimbing2: { nip: parseJosn.nip, nama: parseJosn.nama }, nim2: parseJosn.nip }));
     }
     return;
   }

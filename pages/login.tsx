@@ -14,7 +14,6 @@ import {
     const toast = useToast();
     const [email, setEmail] = useState("");
     const [passowrd, setPassword] = useState("");
-  
     const [loading, setLoading] = useState(false);
   
     const onLogin = async () => {
@@ -23,12 +22,12 @@ import {
         auth.signInWithEmailAndPassword(email, passowrd);
       }
      else {
-      await db.collection("data-mahasiswa").where("email", "==", email).get().then((v) => {
+      await db.collection("data-mahasiswa").where("nim", "==", email).get().then((v) => {
         if(v.empty) {
-         db.collection('/data-dosen').where('email', '==', email).get().then((vd) => {
+         db.collection('/data-dosen').where('nip', '==', email).get().then((vd) => {
            if(vd.empty){
              toast({
-               description: "Email tidak terdaftar",
+               description: "Nim/Nip belum terdaftar",
                status: "error",
              });
              return;
@@ -46,7 +45,7 @@ import {
              if(passowrd === passwords) {
                if(!isLogin) {
                  auth
-                  .createUserWithEmailAndPassword(email, passowrd)
+                  .createUserWithEmailAndPassword(emails, passowrd)
                   .then((response) => {
                    console.log(response)
                   })
@@ -55,7 +54,7 @@ import {
                  return { error };
                 });
                }else if(isLogin){
-                 auth.signInWithEmailAndPassword(email, passowrd);
+                 auth.signInWithEmailAndPassword(emails, passowrd);
                }
               }
               else{
@@ -86,7 +85,7 @@ import {
           if(passowrd === passwords) {
            if(!isLogin) {
              auth
-              .createUserWithEmailAndPassword(email, passowrd)
+              .createUserWithEmailAndPassword(emails, passowrd)
               .then((response) => {
                console.log(response)
               })
@@ -95,7 +94,7 @@ import {
              return { error };
             });
            }else if(isLogin){
-             auth.signInWithEmailAndPassword(email, passowrd);
+             auth.signInWithEmailAndPassword(emails, passowrd);
            }
           }
           else{
@@ -134,15 +133,15 @@ import {
             shadow={"md"}
           >
             <VStack align={"start"}>
-              <Text fontWeight={"bold"}>Email</Text>
+              <Text fontWeight={"bold"}>NIM/NIP</Text>
               <Input
-                type={"email"}
-                placeholder="Email"
+                // type={"email"}
+                placeholder="NIM/NIP"
                 borderColor={"black"}
                 width={"400px"}
                 borderWidth={"2px"}
                 onChange={(e) => setEmail(e.target.value)}
-                value={email}
+                // value={email}
               />
             </VStack>
   

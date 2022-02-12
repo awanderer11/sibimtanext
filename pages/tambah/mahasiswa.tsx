@@ -22,6 +22,8 @@ const Mahasiswa = () => {
     judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
     pembimbing1: {"nip":"","nama": ""},
     pembimbing2: {"nip":"","nama": ""},
+    nip1:"",
+    nip2:"",
     proposal: "",
     hasil: "",
     tutup: "",
@@ -88,7 +90,7 @@ const Mahasiswa = () => {
   const onChangeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
     if(e.target.value !== "Pilih Pembimbing 1"){
       const parseJosn = JSON.parse(e.target.value)
-       setState((prev) => ({ ...prev, pembimbing1: { nip: parseJosn.nip, nama: parseJosn.nama } }));
+       setState((prev) => ({ ...prev, pembimbing1: { nip: parseJosn.nip, nama: parseJosn.nama }, nip1: parseJosn.nip }));
     }
     return;
   }

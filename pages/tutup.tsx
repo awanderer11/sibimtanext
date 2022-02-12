@@ -11,7 +11,7 @@ import {
   IconButton
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { db } from "../config/firebase";
+import { db, auth } from "../config/firebase";
 import { FiLogIn } from "react-icons/fi";
 import router from "next/router";
 
@@ -20,15 +20,49 @@ const Tutup = () => {
   const toast = useToast();
   useEffect(() => {
     async function fetch() {
-      db.collection("data-mahasiswa").onSnapshot((docs) => {
-        const data: any[] = [];
-        docs.forEach((it) => {
-          data.push({
-            ...it.data(),
+      if(auth.currentUser?.email ==="sibimta@email.com"){
+        db.collection("data-mahasiswa").onSnapshot((docs) => {
+          const data: any[] = [];
+          docs.forEach((it) => {
+            data.push({
+              ...it.data(),
+            });
           });
+          setState(data);
         });
-        setState(data);
-      });
+      }
+      else{
+        db.collection("data-dosen").where("email", "==", auth.currentUser?.email).get().then((vd)=>{
+          let nips  = ''
+          let isLogin = false
+            vd.forEach((b) => {
+           isLogin = b.data().isLogin
+           nips = b.data().nip
+            })
+            db.collection("data-mahasiswa").where("nip1", "==", nips).onSnapshot((docs) => {
+              if(docs.empty){
+                db.collection("data-mahasiswa").where("nip2", "==", nips).onSnapshot((docsv) => {
+                  const data: any[] = [];
+                  docsv.forEach((it) => {
+                    data.push({
+                      ...it.data(),
+                    });
+                  });
+                  setState(data);
+                });
+              }
+              const data: any[] = [];
+              docs.forEach((it) => {
+                data.push({
+                  ...it.data(),
+                });
+              });
+              setState(data);
+            });
+        })
+        
+        
+      }
     }
     fetch();
   }, []);
