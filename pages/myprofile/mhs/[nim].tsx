@@ -1,4 +1,4 @@
-import { Container, Button, useToast,Text, Image } from "@chakra-ui/react";
+import { Container, Button, useToast,Text, InputGroup, Input,InputLeftAddon, SimpleGrid, VStack  } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { InputWihtText } from "../../../component/InputText";
 import { db, FirebaseApp } from "../../../config/firebase";
@@ -55,24 +55,10 @@ const MyProfile = () => {
 
 const onSubmit = async (nim: string) => {
     setLoading(true);
-    const metadata = {
-      contentType: "image/jpeg",
-    };
-
-    const snapshot = await FirebaseApp.storage()
-      .ref()
-      .child(
-        `/images/${new Date().toISOString().substring(0, 10)}-${
-          state.nim
-        }`
-      )
-      .put(selectedFile, metadata);
-
-     const imageUrl = await snapshot.ref.getDownloadURL();
-
-    await db
+    if(preview === "https://via.placeholder.com/150"){ 
+      await db
       .doc(`data-mahasiswa/${nim}`)
-      .update({...state, img_url: imageUrl,})
+      .update({...state, img_url: state.img_url})
       .then(() => {
         toast({
           description: "Update Data Berhasil",
@@ -84,77 +70,121 @@ const onSubmit = async (nim: string) => {
         console.log(e);
       });
     setLoading(false);
+    return;
+    }
+    else{
+      const metadata = {
+        contentType: "image/jpeg",
+      };
+  
+      const snapshot = await FirebaseApp.storage()
+        .ref()
+        .child(
+          `/images/${new Date().toISOString().substring(0, 10)}-${
+            state.nim
+          }`
+        )
+        .put(selectedFile, metadata);
+       const imageUrl = await snapshot.ref.getDownloadURL();
+      await db
+        .doc(`data-mahasiswa/${nim}`)
+        .update({...state, img_url: imageUrl,})
+        .then(() => {
+          toast({
+            description: "Update Foto Berhasil",
+            status: "success",
+          });
+          setLoading(false);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      setLoading(false);
+      return;
+    }
+   
   };
 
 
   return (
+    <SimpleGrid columns={2} spacing={10}>
     <Container maxW={"container.xl"}>
       <Text>FOTO</Text>
       <ImagePick
           imageUrl={state.img_url == "" ? preview : state.img_url }
           onChange={(e) => onSelectFile(e.target)}
         />
-      <InputWihtText
-        title="NIM"
-        value={state.nim}
-        onChange={(e) => setState((prev) => ({ ...prev, nim: e.target.value }))}
-      />
-      <InputWihtText
-        title="Nama"
-        value={state.nama}
+      <InputGroup mt={2}>
+        <InputLeftAddon children='NIM' />
+        <Input type='tel' placeholder='' disabled value={state.nim} 
+        onChange={(e) => setState((prev) => ({ ...prev, nip: e.target.value }))}
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Nama' />
+        <Input type='tel' placeholder=''  value={state.nama} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, nama: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Tanggal Lahir"
-        value={state.tanggallahir}
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Tanggal Lahir' />
+        <Input type='tel' placeholder=''  value={state.tanggallahir} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, tanggallahir: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Tahun Masuk"
-        value={state.tahunmasuk}
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Tahun Masuk' />
+        <Input type='tel' placeholder=''  value={state.tahunmasuk} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, tahunmasuk: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Email"
-        value={state.email}
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Email' />
+        <Input type='tel' placeholder=''  disabled value={state.email} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, email: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Alamat"
-        value={state.alamat}
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Alamat' />
+        <Input type='tel' placeholder=''  value={state.alamat} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, alamat: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Kontak"
-        value={state.kontak}
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Kontak' />
+        <Input type='tel' placeholder=''  value={state.kontak} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, kontak: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Jenis Kelamin"
-        value={state.jeniskelamin}
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Jenis Kelamin' />
+        <Input type='tel' placeholder=''  value={state.jeniskelamin} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, jeniskelamin: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Agama"
-        value={state.agama}
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Agama' />
+        <Input type='tel' placeholder=''  value={state.agama} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, agama: e.target.value }))
         }
-      />
+        />
+        </InputGroup>
+      <VStack align={"end"}>
       <Button
         colorScheme={"green"}
         color={"white"}
@@ -164,7 +194,9 @@ const onSubmit = async (nim: string) => {
       >
         Simpan
       </Button>
+      </VStack>
     </Container>
+    </SimpleGrid>
   );
 };
 

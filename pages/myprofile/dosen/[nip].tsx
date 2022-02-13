@@ -1,4 +1,4 @@
-import { Container, Button, useToast } from "@chakra-ui/react";
+import { Container, Button, useToast, InputGroup, InputLeftAddon, Input, SimpleGrid, VStack } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { InputWihtText } from "../../../component/InputText";
 import { db, FirebaseApp } from "../../../config/firebase";
@@ -49,6 +49,24 @@ const MyProfile = () => {
 
 const onSubmit = async (nip: string) => {
     setLoading(true);
+
+    if(preview === "https://via.placeholder.com/150"){
+      await db
+      .doc(`data-dosen/${nip}`)
+      .update({...state, img_url: state.img_url,})
+      .then(() => {
+        toast({
+          description: "Update Data Berhasil",
+          status: "success",
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    setLoading(false);
+    }
+   else{
     const metadata = {
       contentType: "image/jpeg",
     };
@@ -69,7 +87,7 @@ const onSubmit = async (nip: string) => {
       .update({...state, img_url: imageUrl,})
       .then(() => {
         toast({
-          description: "Update Data Berhasil",
+          description: "Update Foto Berhasil",
           status: "success",
         });
         setLoading(false);
@@ -78,41 +96,48 @@ const onSubmit = async (nip: string) => {
         console.log(e);
       });
     setLoading(false);
+   }
   };
 
 
   return (
+    <SimpleGrid columns={2} spacing={10}>
     <Container maxW={"container.xl"}>
       <ImagePick
           imageUrl={state.img_url == "" ? preview : state.img_url }
           onChange={(e) => onSelectFile(e.target)}
         />
-      <InputWihtText
-        title="NIP"
-        value={state.nip}
+      <InputGroup mt={2}>
+        <InputLeftAddon children='NIP' />
+        <Input type='tel' placeholder='' disabled value={state.nip} 
         onChange={(e) => setState((prev) => ({ ...prev, nip: e.target.value }))}
-      />
-      <InputWihtText
-        title="Nama"
-        value={state.nama}
+        />
+        </InputGroup>
+        <InputGroup mt={2}>
+        <InputLeftAddon children='Nama' />
+        <Input type='tel' placeholder=''  value={state.nama} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, nama: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Kontak"
-        value={state.kontak}
+        />
+        </InputGroup>
+        <InputGroup mt={2}>
+        <InputLeftAddon children='Kontak' />
+        <Input type='tel' placeholder=''  value={state.kontak} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, kontak: e.target.value }))
         }
-      />
-      <InputWihtText
-        title="Email"
-        value={state.email}
+        />
+        </InputGroup>
+        <InputGroup mt={2}>
+        <InputLeftAddon children='Email' />
+        <Input type='tel' placeholder='' disabled  value={state.email} 
         onChange={(e) =>
           setState((prev) => ({ ...prev, email: e.target.value }))
         }
-      />
+        />
+        </InputGroup>
+      <VStack align={"end"}>    
       <Button
         colorScheme={"green"}
         color={"white"}
@@ -122,7 +147,9 @@ const onSubmit = async (nip: string) => {
       >
         Simpan
       </Button>
+      </VStack>
     </Container>
+    </SimpleGrid>
   );
 };
 

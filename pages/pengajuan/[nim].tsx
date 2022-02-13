@@ -12,9 +12,13 @@ const AjukanJudul = () => {
   const [valMessage, setValMessage] = useState("");
   const [state, setState] = useState({
     nim:"",
+    nama:"",
+    img_url:"",
+    nip1:"",
+    nip2:"",
     judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
   });
-
+  
   useEffect(() => {
     async function fetch() {
       await db
@@ -29,7 +33,6 @@ const AjukanJudul = () => {
     }
     fetch();
   }, []);
-
 
   useEffect(() => {
     async function fetch() {
@@ -114,7 +117,7 @@ const AjukanJudul = () => {
                     <Box bg='#F7FAFC'>{it.username}</Box>
                     <Box bg='#F7FAFC'>{it.message}</Box>
                     </VStack>
-                   <Avatar  src={it.username} name={it.username} />
+                   <Avatar  src={it.username} name={it.username}  />
                  </HStack>
                   </VStack>
              </Box>
@@ -123,9 +126,9 @@ const AjukanJudul = () => {
          return (
             <Box  mt={2} bg='white' p={2} color='black'>
                  <HStack align={'end'}>
-                   <Avatar  src={it.username} name={it.username} />
+                   <Avatar  src={ it.username } name={ it.username } />
                     <VStack align={'start'}>
-                    <Box bg='#F7FAFC'>{it.username}</Box>
+                    <Box bg='#F7FAFC'>{ it.username }</Box>
                     <Box bg='#F7FAFC'>{it.message}</Box>
                     </VStack>
                  </HStack>
