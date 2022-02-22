@@ -23,6 +23,8 @@ import {
   FormControl,
   FormLabel,
   ModalFooter,
+  HStack,
+  VStack,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { FiLogIn, FiPlus } from "react-icons/fi";
@@ -145,14 +147,16 @@ return (
       <Input type='tel' placeholder=''   value={state.judul.judul} 
       />
       </InputGroup>
+      <VStack align={"end"}>
       <Button
         mt={4}
         leftIcon={<FiPlus />}
         colorScheme={"green"}
         onClick={onOpen}
       >
-        Tambah Topik Bahasan
+        Topik Bahasan
       </Button>
+      </VStack>
       <Modal
       isOpen={isOpen}
       onClose={onClose}
@@ -204,7 +208,9 @@ return (
       </Tbody>
     </Table>
   </Box>
-  <Button
+      <VStack align={"end"}>
+        <HStack align={"end"}>
+        <Button
           mt={4}
           colorScheme={"green"}
           isLoading={loading}
@@ -212,7 +218,7 @@ return (
         >
           ACC Hasil
         </Button>
-  <Button
+        <Button
         mt={4}
         marginLeft={4}
         colorScheme={"green"}
@@ -221,6 +227,8 @@ return (
       >
         Kembali
       </Button>
+      </HStack>
+      </VStack>
   </Container>
   </SimpleGrid>
 );

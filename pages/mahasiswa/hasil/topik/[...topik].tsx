@@ -1,7 +1,7 @@
 import { 
     Container, 
     useToast,
-    Box, 
+    VStack,
     InputGroup, 
     Input,
     InputLeftAddon, 
@@ -10,6 +10,7 @@ import {
     Text,
     Button,
     Textarea,
+    HStack,
  } from "@chakra-ui/react";
  import FilePick from "../../../../component/fiepick";
  import ImagePick from "../../../../component/imagepick";
@@ -73,7 +74,7 @@ const Hasil = () => {
   useEffect(() => {
     async function fetch() {
       await db
-        .doc(`data-mahasiswa/${topik[0]}`).collection("proposal").doc(`${topik[1]}`)
+        .doc(`data-mahasiswa/${topik[0]}`).collection("hasil").doc(`${topik[1]}`)
         .get()
         .then((docs) => {
           setStateMhs({ ...(docs.data() as any) });
@@ -202,14 +203,7 @@ const Hasil = () => {
         <InputLeftAddon children='Keterangan' />
         <Textarea onChange={(e) => setStateMhs((prev) => ({ ...prev, keterangan: e.target.value }))} value={stateMhs.keterangan} placeholder='Tulis keterangan'></Textarea>
         </InputGroup>
-        <Button
-          mt={4}
-          colorScheme={"green"}
-          isLoading={loading}
-        onClick={() => router.back()}
-        >
-          Kembali
-        </Button>
+        
       </>
         
     </Container>
@@ -223,6 +217,8 @@ const Hasil = () => {
           imageUrl={stateMhs.imgUrl == "" ? previewImage : stateMhs.imgUrl }
           onChange={(ee) => {onSelectImage(ee.target)}}
         />
+        <VStack align={"end"}>
+        <HStack align={"end"}>
         <Button
           mt={4}
           colorScheme={"green"}
@@ -231,6 +227,16 @@ const Hasil = () => {
         >
           Kirim
         </Button>
+        <Button
+          mt={4}
+          colorScheme={"green"}
+          isLoading={loading}
+        onClick={() => router.back()}
+        >
+          Kembali
+        </Button>
+        </HStack>
+        </VStack>
         
     </Container>
     </SimpleGrid>

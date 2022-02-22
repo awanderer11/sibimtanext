@@ -23,10 +23,12 @@ import {
     FormControl,
     FormLabel,
     ModalFooter,
+    HStack,
+    VStack,
  } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { FiLogIn, FiPlus } from "react-icons/fi";
-import { db, FirebaseApp } from "../../../config/firebase";
+import { db } from "../../../config/firebase";
 import router from "next/router";
 
 const Proposal = () => {
@@ -145,14 +147,16 @@ const Proposal = () => {
         <Input type='tel' placeholder=''   value={state.judul.judul} 
         />
         </InputGroup>
+        <VStack align={"end"}>
         <Button
           mt={4}
           leftIcon={<FiPlus />}
           colorScheme={"green"}
           onClick={onOpen}
         >
-          Tambah Topik Bahasan
+          Topik Bahasan
         </Button>
+        </VStack>
         <Modal
         isOpen={isOpen}
         onClose={onClose}
@@ -204,6 +208,8 @@ const Proposal = () => {
         </Tbody>
       </Table>
     </Box>
+    <VStack align={"end"}>
+        <HStack align={"end"}>
     <Button
           mt={4}
           colorScheme={"green"}
@@ -221,6 +227,8 @@ const Proposal = () => {
         >
           Kembali
         </Button>
+        </HStack>
+        </VStack>
     </Container>
     </SimpleGrid>
   );

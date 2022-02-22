@@ -197,20 +197,23 @@ const Room = () => {
         </Select>
         </InputGroup>
         }
-        </Box>
         <InputGroup mt={2}>
         <InputLeftAddon children='Judul' />
         <Input type='tel' placeholder='' disabled  value={mhs.judul.judul} />
         </InputGroup>
-      <Box>
-      <a target="_blank" href={mhs.judul.url} rel="noopener noreferrer"> 
+        <InputGroup mt={2}>
+        <InputLeftAddon children='Unduh Berkas' />
+        <a target="_blank" href={mhs.judul.url} rel="noopener noreferrer"> 
       <IconButton
-      mt={2}
       aria-label="icon"
       icon={ <FiDownload />}
         />
       </a>
+        </InputGroup>
+      
       </Box>
+      <VStack align={"end"}>
+        <HStack align={"end"}>
       <Button
         colorScheme={"green"}
         color={"white"}
@@ -229,6 +232,8 @@ const Room = () => {
         >
           Kembali
         </Button>
+        </HStack>
+        </VStack>
       </Box>
       
 

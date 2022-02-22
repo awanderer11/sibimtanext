@@ -10,6 +10,8 @@ import {
     Text,
     Button,
     Textarea,
+    VStack,
+    HStack,
  } from "@chakra-ui/react";
  import FilePick from "../../../../component/fiepick";
  import ImagePick from "../../../../component/imagepick";
@@ -204,14 +206,7 @@ const Proposal = () => {
         <InputLeftAddon children='Keterangan' />
         <Textarea onChange={(e) => setStateMhs((prev) => ({ ...prev, keterangan: e.target.value }))} value={stateMhs.keterangan} placeholder='Tulis keterangan'></Textarea>
         </InputGroup>
-        <Button
-          mt={4}
-          colorScheme={"green"}
-          isLoading={loading}
-        onClick={() => router.back()}
-        >
-          Kembali
-        </Button>
+        
       </>
         
     </Container>
@@ -225,6 +220,8 @@ const Proposal = () => {
           imageUrl={stateMhs.imgUrl == "" ? previewImage : stateMhs.imgUrl }
           onChange={(ee) => {onSelectImage(ee.target)}}
         />
+        <VStack align={"end"}>
+        <HStack align={"end"}>
         <Button
           mt={4}
           colorScheme={"green"}
@@ -233,6 +230,16 @@ const Proposal = () => {
         >
           Kirim
         </Button>
+        <Button
+          mt={4}
+          colorScheme={"green"}
+          isLoading={loading}
+        onClick={() => router.back()}
+        >
+          Kembali
+        </Button>
+        </HStack>
+        </VStack>
         
     </Container>
     </SimpleGrid>

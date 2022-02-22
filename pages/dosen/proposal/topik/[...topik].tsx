@@ -8,10 +8,12 @@ import {
     Select,
     IconButton,
     Button,
-    Textarea
+    Textarea,
+    VStack,
+    HStack,
  } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { FiImage, FiFile } from "react-icons/fi";
+import { FiDownload } from "react-icons/fi";
 import { db } from "../../../../config/firebase";
 import router from "next/router";
 
@@ -104,7 +106,7 @@ const Proposal = () => {
   }
 
   return (
-    <SimpleGrid columns={1} spacing={10}>
+    <SimpleGrid columns={2} spacing={10}>
     <Container maxW={"container.xl"}>
       <InputGroup mt={2}>
         <InputLeftAddon children='NIM' />
@@ -127,29 +129,34 @@ const Proposal = () => {
         <Input type='tel' placeholder=''   value={stateMhs.tglBimbingan} 
         />
         </InputGroup>
-        <InputGroup mt={2}>
+       
+      </>
+        
+    </Container>
+    <Container>
+    <InputGroup mt={2}>
         <InputLeftAddon children='Topik Bahasan' />
         <Input type='tel' placeholder=''   value={stateMhs.topikBahasan} 
         />
         </InputGroup>
         <InputGroup mt={2}>
-        <InputLeftAddon children='Berkas' />
-        <Box>
-      <a target="_blank" href={stateMhs.fileUrl} rel="noopener noreferrer"> 
-      <IconButton
-      marginLeft={2}
-      aria-label="icon"
-      icon={ <FiFile />}
-        />
-      </a>
+        <InputLeftAddon children='Unduh Berkas' />
+        <a target="_blank" href={stateMhs.fileUrl} rel="noopener noreferrer"> 
+        <IconButton
+         aria-label="icon"
+        icon={ <FiDownload />}
+          />
+        </a>
+        </InputGroup>
+        <InputGroup mt={2}>
+        <InputLeftAddon children='Unduh Media' />
+      
       <a target="_blank" href={stateMhs.imgUrl} rel="noopener noreferrer"> 
       <IconButton
-      marginLeft={2}
       aria-label="icon"
-      icon={ <FiImage />}
+      icon={ <FiDownload />}
         />
       </a>
-      </Box>
         </InputGroup>
       <InputGroup mt={2}>
         <InputLeftAddon children='Status Bimbingan' />
@@ -163,6 +170,8 @@ const Proposal = () => {
         <InputLeftAddon children='Keterangan' />
         <Textarea onChange={(e) => setStateMhs((prev) => ({ ...prev, keterangan: e.target.value }))} value={stateMhs.keterangan} placeholder='Tulis keterangan'></Textarea>
         </InputGroup>
+        <VStack align={"end"}>
+        <HStack align={"end"}>
         <Button
           mt={4}
           colorScheme={"green"}
@@ -180,11 +189,8 @@ const Proposal = () => {
         >
           Kembali
         </Button>
-      </>
-        
-    </Container>
-    <Container>
-      
+        </HStack>
+        </VStack>
     </Container>
     </SimpleGrid>
   );
