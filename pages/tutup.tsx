@@ -97,7 +97,7 @@ const Tutup = () => {
               <Td><IconButton
                     aria-label="icon"
                     icon={<FiLogIn />}
-                    onClick={() => router.push(`/bimbingan/${it.nim}`)}
+                    onClick={() => router.push(`/dosen/tutup/${it.nim}`)}
                   /></Td>
             </Tr>
           ))}

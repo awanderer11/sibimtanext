@@ -47,7 +47,7 @@ const [state, setState] = useState({
   jeniskelamin: "",
   agama: "",
   img_url:"",
-  sempro: false,
+  semhas: false,
   prpsl:{bab1:{tglBimbingan:"", status:"", keterangan:""}, bab2:{tglBimbingan:"", status:"", keterangan:""}},
   updated_at: new Date().toISOString().substring(0, 10),
 });
@@ -113,7 +113,7 @@ const onSubmitAcc = async (nim: string) => {
   setLoading(true);
   await db
   .doc(`data-mahasiswa/${nim}`)
-  .update({...state, sempro: true} )
+  .update({...state, semhas: true} )
   .then(() => {
     toast({
       description: "Berhasil",
@@ -127,6 +127,7 @@ const onSubmitAcc = async (nim: string) => {
 setLoading(false);
 return;
 };
+
 return (
   <SimpleGrid columns={1} spacing={10}>
   <Container maxW={"container.xl"}>
@@ -197,13 +198,30 @@ return (
             <Td><IconButton
                   aria-label="icon"
                   icon={<FiLogIn />}
-                  onClick={() => router.push(`/mahasiswa/hasil/topik/${state.nim}/${it.id}`)}
+                  onClick={() => router.push(`/dosen/hasil/topik/${state.nim}/${it.id}`)}
                 /></Td>
           </Tr>
           ))}
       </Tbody>
     </Table>
   </Box>
+  <Button
+          mt={4}
+          colorScheme={"green"}
+          isLoading={loading}
+        onClick={() => onSubmitAcc(state.nim)}
+        >
+          ACC Hasil
+        </Button>
+  <Button
+        mt={4}
+        marginLeft={4}
+        colorScheme={"green"}
+        isLoading={loading}
+      onClick={() => router.back()}
+      >
+        Kembali
+      </Button>
   </Container>
   </SimpleGrid>
 );

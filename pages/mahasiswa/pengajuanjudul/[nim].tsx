@@ -9,6 +9,7 @@ import {
     Thead,
     Tr,
     useToast,
+    Link
   } from "@chakra-ui/react";
   import React, { useEffect, useState } from "react";
   import { FiLogIn, FiUpload } from "react-icons/fi";
@@ -58,7 +59,6 @@ import {
               <Tr>
                 <Td>{state.nim}</Td>
                 <Td>{state.nama}</Td>
-               
                <Td>{state.judul.judul === "" ? <IconButton
                       aria-label="icon"
                       icon={<FiUpload />}
@@ -66,6 +66,7 @@ import {
                     /> : state.judul.judul }</Td>
                 <Td>{state.pembimbing1.nama}</Td>
                 <Td>{state.pembimbing2.nama}</Td>
+                {/* <Td><Link href="/">{state.pembimbing2.nama}</Link></Td> */}
                 <Td><IconButton
                       aria-label="icon"
                       icon={ <FiLogIn />}

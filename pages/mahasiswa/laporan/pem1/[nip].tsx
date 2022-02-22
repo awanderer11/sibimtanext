@@ -1,9 +1,9 @@
 import { Container, Button, useToast,Text, InputGroup, Input,InputLeftAddon, SimpleGrid, VStack  } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
-import { InputWihtText } from "../../../component/InputText";
-import { db, FirebaseApp } from "../../../config/firebase";
+import { InputWihtText } from "../../../../component/InputText";
+import { db, FirebaseApp } from "../../../../config/firebase";
 import router from "next/router";
-import ImagePick from "../../../component/imagepick";
+import ImagePick from "../../../../component/imagepick";
 
 const MyProfile = () => {
   const toast = useToast();
@@ -23,7 +23,6 @@ const MyProfile = () => {
     jeniskelamin: "",
     agama: "",
     img_url:"",
-    prpsl:{bab1:{tglBimbingan:"", status:"", keterangan:""}, bab2:{tglBimbingan:"", status:"", keterangan:""}},
     updated_at: new Date().toISOString().substring(0, 10),
   });
   useEffect(() => {
@@ -185,14 +184,6 @@ const onSubmit = async (nim: string) => {
         }
         />
         </InputGroup>
-      {/* <InputGroup mt={2}>
-        <InputLeftAddon children='keterangan' />
-        <Input type='tel' placeholder=''  value={state.prpsl.bab1.keterangan} 
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, prpsl: {bab1: {keterangan: e.target.value, tglBimbingan:state.prpsl.bab1.tglBimbingan,status: state.prpsl.bab1.status}, bab2: {keterangan: state.prpsl.bab2.keterangan, tglBimbingan:state.prpsl.bab2.tglBimbingan,status: state.prpsl.bab2.status}} }))
-        }
-        />
-        </InputGroup> */}
       <VStack align={"end"}>
       <Button
         colorScheme={"green"}

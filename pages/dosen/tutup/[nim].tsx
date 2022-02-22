@@ -29,7 +29,7 @@ import { FiLogIn, FiPlus } from "react-icons/fi";
 import { db, FirebaseApp } from "../../../config/firebase";
 import router from "next/router";
 
-const Hasil = () => {
+const Tutup = () => {
 const toast = useToast();
 const { isOpen, onOpen, onClose } = useDisclosure();
 const [valMessage, setValMessage] = useState("");
@@ -47,7 +47,7 @@ const [state, setState] = useState({
   jeniskelamin: "",
   agama: "",
   img_url:"",
-  sempro: false,
+  semtutup: false,
   prpsl:{bab1:{tglBimbingan:"", status:"", keterangan:""}, bab2:{tglBimbingan:"", status:"", keterangan:""}},
   updated_at: new Date().toISOString().substring(0, 10),
 });
@@ -69,7 +69,7 @@ useEffect(() => {
 
 useEffect(() => {
   async function fetch() {
-    db.collection(`data-mahasiswa/${router.query.nim}/hasil`).onSnapshot((docs) => {
+    db.collection(`data-mahasiswa/${router.query.nim}/tutup`).onSnapshot((docs) => {
       const data: any[] = [];
       docs.forEach((it) => {
         data.push({
@@ -85,7 +85,7 @@ useEffect(() => {
 const onSubmit = async () => {
   setLoading(true);
   const id = Date.now().toString();
-  await db.doc(`data-mahasiswa/${router.query.nim}/hasil/${id}`)
+  await db.doc(`data-mahasiswa/${router.query.nim}/tutup/${id}`)
     .set({ topikBahasan: valMessage, tglBimbingan: new Date().toLocaleDateString().substring(0, 10),
             fileUrl: "",
             imgUrl: "",
@@ -108,12 +108,11 @@ const onSubmit = async () => {
     onClose();
   setLoading(false);
 };
-
 const onSubmitAcc = async (nim: string) => {
   setLoading(true);
   await db
   .doc(`data-mahasiswa/${nim}`)
-  .update({...state, sempro: true} )
+  .update({...state, semtutup: true} )
   .then(() => {
     toast({
       description: "Berhasil",
@@ -127,6 +126,7 @@ const onSubmitAcc = async (nim: string) => {
 setLoading(false);
 return;
 };
+
 return (
   <SimpleGrid columns={1} spacing={10}>
   <Container maxW={"container.xl"}>
@@ -197,16 +197,33 @@ return (
             <Td><IconButton
                   aria-label="icon"
                   icon={<FiLogIn />}
-                  onClick={() => router.push(`/mahasiswa/hasil/topik/${state.nim}/${it.id}`)}
+                  onClick={() => router.push(`/dosen/tutup/topik/${state.nim}/${it.id}`)}
                 /></Td>
           </Tr>
           ))}
       </Tbody>
     </Table>
   </Box>
+  <Button
+          mt={4}
+          colorScheme={"green"}
+          isLoading={loading}
+        onClick={() => onSubmitAcc(state.nim)}
+        >
+          ACC Hasil
+        </Button>
+  <Button
+        mt={4}
+        marginLeft={4}
+        colorScheme={"green"}
+        isLoading={loading}
+      onClick={() => router.back()}
+      >
+        Kembali
+      </Button>
   </Container>
   </SimpleGrid>
 );
 };
 
-export default Hasil;
+export default Tutup;

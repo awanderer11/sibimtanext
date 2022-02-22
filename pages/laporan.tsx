@@ -42,7 +42,7 @@ const Laporan = () => {
             <Th>NIM</Th>
             <Th>Nama</Th>
             <Th>SEMPRO</Th>
-            <Th>SEMHAS 1</Th>
+            <Th>SEMHAS</Th>
             <Th>Tutup</Th>
             <Th>Yudisium</Th>
             

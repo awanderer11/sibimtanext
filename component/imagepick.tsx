@@ -17,7 +17,7 @@ const ImagePick: FC<ImagePicProps> = ({
         accept="image/*"
         id={"image"}
         style={{ display: "none" }}
-        multiple={false}
+        multiple={true}
         onChange={onChange}
       />
       <label htmlFor={"image"}>

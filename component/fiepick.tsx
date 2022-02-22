@@ -9,13 +9,13 @@ const FilePick: FC<ImagePicProps> = ({
   onChange,
 }: ImagePicProps) => {
   return (
-    <Box>
+    <Box mt={2}>
       <input
         type="file"
         accept="docx/*"
-        id={"image"}
+        id={"file"}
         // style={{ display: "none" }}
-        multiple={false}
+        multiple={true}
         onChange={onChange}
       />
       

@@ -220,7 +220,17 @@ const Room = () => {
       >
         Terima Judul
       </Button>
+      <Button
+      mt={2}
+          marginLeft={4}
+          colorScheme={"green"}
+          isLoading={loading}
+        onClick={() => router.back()}
+        >
+          Kembali
+        </Button>
       </Box>
+      
 
     </Container>
     </SimpleGrid>
