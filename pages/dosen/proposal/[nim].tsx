@@ -34,6 +34,7 @@ import router from "next/router";
 const Proposal = () => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isOpen: isOpenAcc, onOpen: onOpenAcc, onClose: onCloseAcc } = useDisclosure();
   const [valMessage, setValMessage] = useState("");
   const [loading, setLoading] = useState(false);
   const [stateMhs, setStateMhs] = useState<any[]>([]);
@@ -126,6 +127,7 @@ const Proposal = () => {
     .catch((e) => {
       console.log(e);
     });
+    onCloseAcc();
   setLoading(false);
   return;
   };
@@ -214,10 +216,31 @@ const Proposal = () => {
           mt={4}
           colorScheme={"green"}
           isLoading={loading}
-        onClick={() => onSubmitAcc(state.nim)}
+        onClick={onOpenAcc}
         >
           ACC Proposal
         </Button>
+
+        <Modal
+       isOpen={isOpenAcc}
+       onClose={onCloseAcc}
+         >
+        <ModalOverlay />
+       <ModalContent>
+        <ModalHeader>ACC Proposal?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          
+        </ModalBody>
+
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={() => onSubmitAcc(state.nim)}>
+            ACC
+          </Button>
+          <Button onClick={onCloseAcc}>Batal</Button>
+        </ModalFooter>
+       </ModalContent>
+       </Modal>
     <Button
           mt={4}
           marginLeft={4}

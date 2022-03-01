@@ -1,4 +1,13 @@
-import { Container, Button, useToast,Text, InputGroup, Input,InputLeftAddon, SimpleGrid, VStack  } from "@chakra-ui/react";
+import { Container, Button, useToast,Text, InputGroup, Input,InputLeftAddon, SimpleGrid, VStack,
+  Modal, 
+  ModalOverlay,
+  ModalHeader,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure,
+  } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { InputWihtText } from "../../../component/InputText";
 import { db, FirebaseApp } from "../../../config/firebase";
@@ -7,6 +16,7 @@ import ImagePick from "../../../component/imagepick";
 
 const MyProfile = () => {
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [preview, setPreview] = useState<any>(
     "https://via.placeholder.com/150"
   );
@@ -198,12 +208,32 @@ const onSubmit = async (nim: string) => {
         colorScheme={"green"}
         color={"white"}
         mt={10}
-        onClick={() => onSubmit(state.nim)}
+        onClick={onOpen}
         isLoading={loading}
       >
         Simpan
       </Button>
       </VStack>
+      <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+       >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Yakin Ingin Menyimpan Perubahan?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          
+        </ModalBody>
+
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={() => onSubmit(state.nim)}>
+            Simpan
+          </Button>
+          <Button onClick={onClose}>Batal</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
     </Container>
     </SimpleGrid>
   );

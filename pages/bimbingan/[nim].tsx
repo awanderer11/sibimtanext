@@ -1,11 +1,34 @@
 import React, { useEffect, useState } from "react";
 import { auth, db } from "../../config/firebase";
-import { Container, Button, useToast, Box, HStack, Avatar, VStack, Textarea, SimpleGrid, Input, InputGroup, InputLeftAddon, Select, IconButton } from "@chakra-ui/react";
+import { Container, 
+  Button, 
+  useToast,
+  Box, 
+  HStack, 
+  Avatar, 
+  VStack, 
+  Textarea, 
+  SimpleGrid, 
+  Input, 
+  InputGroup, 
+  InputLeftAddon, 
+  Select, 
+  IconButton,
+  Modal, 
+  ModalOverlay,
+  ModalHeader,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure,
+ } from "@chakra-ui/react";
 import { FiDownload } from "react-icons/fi";
 import router from "next/router";
 
 const Room = () => {
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState<any[]>([]);
   const [valMessage, setValMessage] = useState("");
@@ -219,10 +242,31 @@ const Room = () => {
         color={"white"}
         mt={2}
         isLoading={loading}
-        onClick={() => onSubmitJudul(mhs.nim)}
+        onClick={onOpen}
       >
         Terima Judul
       </Button>
+      <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+       >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Yakin Ingin Menyimpan Perubahan?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+          
+        </ModalBody>
+
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={() => onSubmitJudul(mhs.nim)}>
+            Simpan
+          </Button>
+          <Button onClick={onClose}>Batal</Button>
+        </ModalFooter>
+      </ModalContent>
+    </Modal>
+
       <Button
       mt={2}
           marginLeft={4}

@@ -19,7 +19,7 @@ import {
   } from "@chakra-ui/react";
   import { ReactNode, useEffect, useState } from "react";
   import router from "next/router";
-  import { FiMenu, FiUsers } from "react-icons/fi";
+  import { FiMenu, FiUsers, FiUser } from "react-icons/fi";
   import{BsBookHalf, BsFillBookmarkFill, BsFillChatLeftQuoteFill, BsFillChatSquareTextFill, BsFillBookFill, BsFillBookmarksFill, BsFillGridFill} from "react-icons/bs";
   
   import { auth, db } from "../config/firebase";
@@ -124,7 +124,7 @@ import {
         >
           {auth.currentUser?.email === 'sibimta@email.com' && (
               <>
-          <NavItem icon={BsFillGridFill} link="/">
+          <NavItem icon={BsFillGridFill} link="/dashboard">
             Dashboard
           </NavItem>
           <Divider />
@@ -171,11 +171,11 @@ import {
 
           {roles === 'dosen' && (
               <>
-          <NavItem icon={BsFillGridFill} link="/">
+          <NavItem icon={BsFillGridFill} onClick={() => router.push(`/dashboard/dosen/${nip}`)}>
             Dashboard
           </NavItem>
           <Divider />
-          <NavItem icon={FiUsers} onClick={() => router.push(`/myprofile/dosen/${nip}`)}>
+          <NavItem icon={FiUser} onClick={() => router.push(`/myprofile/dosen/${nip}`)}>
               My Profile
             </NavItem>
             <Divider />
@@ -210,11 +210,11 @@ import {
 
           {roles === 'mahasiswa' && (
           <>
-            <NavItem icon={BsFillGridFill} link="/">
+            <NavItem icon={BsFillGridFill} onClick={() => router.push(`/dashboard/mahasiswa/${nim}`)}>
               Dashboard
             </NavItem>
             <Divider />
-            <NavItem icon={FiUsers} onClick={() => router.push(`/myprofile/mhs/${nim}`)}>
+            <NavItem icon={FiUser} onClick={() => router.push(`/myprofile/mhs/${nim}`)}>
               My Profile
             </NavItem>
             <Divider />
@@ -222,13 +222,13 @@ import {
               Pengajuan Judul
             </NavItem>
             <Divider />
-            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/proposal/${nim}`)}>
+            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/proposal/index/${nim}`)}>
               Proposal
             </NavItem>
-            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/hasil/${nim}`)}>
+            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/hasil/index/${nim}`)}>
               Hasil
             </NavItem>
-            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/tutup/${nim}`)}>
+            <NavItem icon={BsFillBookmarkFill} onClick={() => router.push(`/mahasiswa/tutup/index/${nim}`)}>
               Tutup
             </NavItem>
             <Divider />

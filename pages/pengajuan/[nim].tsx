@@ -3,7 +3,6 @@ import router from "next/router";
 import { db, auth } from "../../config/firebase";
 import { FiLogIn, FiDownload, FiUpload } from "react-icons/fi";
 import { Container, Button, useToast, Textarea, InputGroup, SimpleGrid, VStack, Box, HStack, Avatar, IconButton, InputLeftAddon, Input  } from "@chakra-ui/react";
-import { InputWihtText } from "../../component/InputText";
 
 const AjukanJudul = () => {
   const toast = useToast();
@@ -86,6 +85,35 @@ const AjukanJudul = () => {
 
   return (
     <SimpleGrid columns={2} spacing={10}>
+      <Container maxW={"container.xl"}>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='NIM' />
+        <Input type='tel' placeholder='' value={state.nim} 
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Nama' />
+        <Input type='tel' placeholder=''  value={state.nama} 
+        />
+        </InputGroup>
+        <InputGroup mt={2}>
+        <InputLeftAddon children='Judul' />
+        <Textarea 
+         value={state.judul.judul}  placeholder=''></Textarea>
+        </InputGroup>
+      
+        <VStack align={'end'}>
+      <Button
+          mt={4}
+          colorScheme={"green"}
+          isLoading={loading}
+        onClick={() => router.back()}
+        >
+          Kembali
+        </Button>
+        </VStack>
+    </Container>
+    
       <Container maxW={"container.xl"}>   
     <Textarea 
         value={valMessage}
@@ -96,6 +124,23 @@ const AjukanJudul = () => {
         />
         <div>
         <VStack align={'end'}>
+        <HStack align={"end"}>
+        <Box>
+         <a target="_blank" href={state.judul.url} rel="noopener noreferrer"> 
+         <IconButton
+         mt={2}
+         aria-label="icon"
+          icon={ <FiDownload />}
+                    />
+         </a>
+          <IconButton
+         mt={2}
+         ml={2}
+        aria-label="icon"
+          icon={ <FiUpload />}
+       onClick={() => router.push(`/uploadfile/${state.nim}`)}
+                    />
+       </Box>
       <Button
         colorScheme={"green"}
         color={"white"}
@@ -105,6 +150,7 @@ const AjukanJudul = () => {
       >
         Send
       </Button>
+      </HStack>
       </VStack>
       </div>
       {chat.map((it)=>{
@@ -136,41 +182,9 @@ const AjukanJudul = () => {
                    )
         }
       })}
+      
     </Container>
-    <Container maxW={"container.xl"}>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Judul' />
-        <Input type='tel' placeholder=''  value={state.judul.judul} 
-        onChange={(e) => setState((prev) => ({ ...prev, judul: {judul: e.target.value, created_at: state.judul.created_at, updated_at: state.judul.updated_at, url: state.judul.url}}))}/>
-        </InputGroup>
-      <Box>
-      <a target="_blank" href={state.judul.url} rel="noopener noreferrer"> 
-      <IconButton
-      mt={2}
-      aria-label="icon"
-      icon={ <FiDownload />}
-                    />
-      </a>
-      <IconButton
-      mt={2}
-      ml={2}
-      aria-label="icon"
-      icon={ <FiUpload />}
-      onClick={() => router.push(`/uploadfile/${state.nim}`)}
-                    />
-      </Box>
-      <VStack align={'end'}>
-      <Button
-        colorScheme={"green"}
-        color={"white"}
-        mt={2}
-        isLoading={loading}
-        onClick={() => onSubmit(state.nim)}
-      >
-        Ajukan
-      </Button>
-      </VStack>
-    </Container>
+    
     </SimpleGrid>
   );
 };

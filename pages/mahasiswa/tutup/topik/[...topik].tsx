@@ -11,7 +11,15 @@ import {
     Button,
     Textarea,
     VStack, 
-    HStack
+    HStack,
+    Modal, 
+    ModalOverlay,
+    ModalHeader,
+    ModalBody,
+    ModalContent,
+    ModalFooter,
+    ModalCloseButton,
+    useDisclosure,
  } from "@chakra-ui/react";
  import FilePick from "../../../../component/fiepick";
  import ImagePick from "../../../../component/imagepick";
@@ -21,6 +29,7 @@ import router from "next/router";
 
 const Tutup = () => {
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [selectedFile, setSelectedFile] = useState<any>(undefined);
   const [selectedImage, setSelectedImage] = useState<any>(undefined);
   const [previewImage, setPreviewImage] = useState<any>(
@@ -151,11 +160,13 @@ const Tutup = () => {
           description: "Unggah Berkas Berhasil",
           status: "success",
         });
+        onClose();
         setLoading(false);
       })
       .catch((e) => {
         console.log(e);
       });
+      onClose();
     setLoading(false);
   };
 
@@ -225,10 +236,28 @@ const Tutup = () => {
           mt={4}
           colorScheme={"green"}
           isLoading={loading}
-        onClick={() => onSubmitBerkas(stateMhs.id)}
+        onClick={onOpen}
         >
           Kirim
         </Button>
+        <Modal
+       isOpen={isOpen}
+       onClose={onClose}
+         >
+        <ModalOverlay />
+       <ModalContent>
+        <ModalHeader>Unggah Berkas?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={() => onSubmitBerkas(stateMhs.id)}>
+            Kirim
+          </Button>
+          <Button onClick={onClose}>Batal</Button>
+        </ModalFooter>
+       </ModalContent>
+       </Modal>
         <Button
           mt={4}
           colorScheme={"green"}

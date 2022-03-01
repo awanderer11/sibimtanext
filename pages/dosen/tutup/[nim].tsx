@@ -34,6 +34,7 @@ import router from "next/router";
 const Tutup = () => {
 const toast = useToast();
 const { isOpen, onOpen, onClose } = useDisclosure();
+const { isOpen: isOpenAcc, onOpen: onOpenAcc, onClose: onCloseAcc } = useDisclosure();
 const [valMessage, setValMessage] = useState("");
 const [loading, setLoading] = useState(false);
 const [stateMhs, setStateMhs] = useState<any[]>([]);
@@ -214,10 +215,29 @@ return (
           mt={4}
           colorScheme={"green"}
           isLoading={loading}
-        onClick={() => onSubmitAcc(state.nim)}
+        onClick={onOpenAcc}
         >
-          ACC Hasil
+          ACC
         </Button>
+        <Modal
+       isOpen={isOpenAcc}
+       onClose={onCloseAcc}
+         >
+        <ModalOverlay />
+       <ModalContent>
+        <ModalHeader>ACC Tutup?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={() => onSubmitAcc(state.nim)}>
+            ACC
+          </Button>
+          <Button onClick={onCloseAcc}>Batal</Button>
+        </ModalFooter>
+       </ModalContent>
+       </Modal>
+
         <Button
         mt={4}
         marginLeft={4}

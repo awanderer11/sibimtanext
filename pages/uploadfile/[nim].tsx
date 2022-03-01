@@ -1,4 +1,16 @@
-import { Container, Button, useToast,Text, Image } from "@chakra-ui/react";
+import { Container, 
+  Button, 
+  useToast,
+  Text, 
+  InputGroup,
+  InputLeftAddon,
+  Input,
+  SimpleGrid,
+  VStack,
+  Box,
+  HStack,
+  Textarea
+ } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { db, FirebaseApp } from "../../config/firebase";
 import router from "next/router";
@@ -13,6 +25,7 @@ const UploadFile = () => {
   const [selectedFile, setSelectedFile] = useState<any>(undefined);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
+    nama:"",
     nim:"",
     judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
   });
@@ -60,9 +73,10 @@ const onSubmit = async (nim: string) => {
 
      const imageUrl = await snapshot.ref.getDownloadURL();
 
-    await db
+    if(selectedFile == null){
+      await db
       .doc(`data-mahasiswa/${nim}`)
-      .update({...state, judul:{judul: state.judul.judul, created_at:new Date().toLocaleDateString().substring(0, 10), updated_at:"", url: imageUrl }})
+      .update({...state, judul:{judul: state.judul.judul, created_at:new Date().toLocaleDateString().substring(0, 10), updated_at:state.judul.updated_at, url: state.judul.url }})
       .then(() => {
         toast({
           description: "Upload Judul Berhasil",
@@ -74,20 +88,56 @@ const onSubmit = async (nim: string) => {
         console.log(e);
       });
     setLoading(false);
+    }else{
+      await db
+      .doc(`data-mahasiswa/${nim}`)
+      .update({...state, judul:{judul: state.judul.judul, created_at:state.judul.created_at, updated_at:new Date().toLocaleDateString().substring(0, 10), url: imageUrl }})
+      .then(() => {
+        toast({
+          description: "Berhasil Memperbarui Data",
+          status: "success",
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
+    setLoading(false);
+    }
   };
 
 
   return (
+    <SimpleGrid columns={2} spacing={10}>
+
     <Container maxW={"container.xl"}>
-         {/* <InputWihtText
-        title="Judul"
-        value={state.judul.judul}
-        onChange={(e) => setState((prev) => ({ ...prev, judul: {judul: e.target.value, created_at: state.judul.created_at, updated_at: state.judul.updated_at, url: state.judul.url}}))}
-      /> */}
-      <Text mt={4}>Upload Berkas</Text>
+         <InputGroup mt={2}>
+        <InputLeftAddon children='NIM' />
+        <Input type='tel' placeholder='' value={state.nim} 
+        />
+        </InputGroup>
+      <InputGroup mt={2}>
+        <InputLeftAddon children='Nama' />
+        <Input type='tel' placeholder=''  value={state.nama} 
+        />
+        </InputGroup>
+        <InputGroup mt={2}>
+        <InputLeftAddon children='Judul' />
+        <Textarea onChange={(e) => setState((prev) => ({ ...prev, judul: {judul: e.target.value, created_at: state.judul.created_at, updated_at: state.judul.updated_at, url: state.judul.url}}))}
+         value={state.judul.judul}  placeholder=''></Textarea>
+        </InputGroup>
+      {
+        state.judul.judul != ""?
+        <Box mt={2} p={4} height={20}  borderWidth='1px' borderRadius='lg'> 
       <FilePick
           onChange={(e) => onSelectFile(e.target)}
-        />
+          />
+          </Box> :
+          <></>
+        }
+
+        <VStack align={"end"}>
+        <HStack align={"end"}>
       <Button
         colorScheme={"green"}
         color={"white"}
@@ -97,7 +147,18 @@ const onSubmit = async (nim: string) => {
       >
         Simpan 
       </Button>
+      <Button
+          mt={4}
+          colorScheme={"green"}
+          isLoading={loading}
+        onClick={() => router.back()}
+        >
+          Kembali
+        </Button>
+      </HStack>
+      </VStack>
     </Container>
+    </SimpleGrid>
   );
 };
 

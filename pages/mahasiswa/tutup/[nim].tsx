@@ -23,6 +23,7 @@ import {
   FormControl,
   FormLabel,
   ModalFooter,
+  VStack,
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { FiLogIn, FiPlus } from "react-icons/fi";
@@ -205,6 +206,16 @@ return (
     </Table>
   </Box>
   </Container>
+  <VStack align={"end"}>
+       <Button
+          mt={4}
+          colorScheme={"green"}
+          isLoading={loading}
+        onClick={() => router.back()}
+        >
+          Kembali
+        </Button>
+        </VStack>
   </SimpleGrid>
 );
 };

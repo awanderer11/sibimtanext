@@ -11,6 +11,14 @@ import {
     Textarea,
     HStack,
     VStack,
+    Modal, 
+  ModalOverlay,
+  ModalHeader,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalCloseButton,
+  useDisclosure,
  } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { FiDownload,  } from "react-icons/fi";
@@ -19,6 +27,7 @@ import router from "next/router";
 
 const tutup = () => {
   const toast = useToast();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const topik = router.query.topik || []
   const [loading, setLoading] = useState(false);
   const [stateMhs, setStateMhs] = useState({
@@ -93,6 +102,7 @@ const tutup = () => {
     .catch((e) => {
       console.log(e);
     });
+    onClose();
   setLoading(false);
   return;
   };
@@ -175,6 +185,24 @@ const tutup = () => {
         >
           Kirim
         </Button>
+        <Modal
+       isOpen={isOpen}
+       onClose={onClose}
+         >
+        <ModalOverlay />
+       <ModalContent>
+        <ModalHeader>Kirim Keterangan dan Status Bimbingan?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={() => onSubmit(stateMhs.id)}>
+            Kirim
+          </Button>
+          <Button onClick={onClose}>Batal</Button>
+        </ModalFooter>
+       </ModalContent>
+       </Modal>
         <Button
           mt={4}
           marginLeft={4}
