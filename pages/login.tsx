@@ -5,11 +5,14 @@ import {
     VStack,
     Text,
     Heading,
-    useToast
+    useToast,
+    Image
   } from "@chakra-ui/react";
   import React, { useState } from "react";
   import { auth, db } from "../config/firebase";
   
+  
+
   const Login = () => {
     const toast = useToast();
     const [email, setEmail] = useState("");
@@ -112,8 +115,10 @@ import {
     };
   
     return (
-      <Box bg="#12B2B3" h={"50vh"} w={[500, 1000, 1500]}>
-        <VStack spacing={10}>
+      <Box bg="#12B2B3" h={"140vh"} w={[500, 1000, 1500]}>
+        <VStack spacing={5}>
+        <Box></Box>
+        <Box  width={420}><Image src="logo.png"/></Box>
           <Heading
             w={500}
             textAlign={"center"}
@@ -123,6 +128,7 @@ import {
           >
             Sistem Bimbingan Tugas Akhir TP FIP UNM
           </Heading>
+          <Box></Box>
           <VStack
             mt={"30vh"}
             align={"stretch"}
@@ -140,6 +146,11 @@ import {
                 borderColor={"black"}
                 width={"400px"}
                 borderWidth={"2px"}
+                onKeyPress={(e)=> {
+                  if(e.key === "Enter"){
+                    onLogin()
+                  }
+                }}
                 onChange={(e) => setEmail(e.target.value)}
                 // value={email}
               />
@@ -154,11 +165,17 @@ import {
                 borderColor={"black"}
                 borderWidth={"2px"}
                 value={passowrd}
+                onKeyPress={(e)=> {
+                  if(e.key === "Enter"){
+                    onLogin()
+                  }
+                }}
                 onChange={(e) => setPassword(e.target.value)}
               />
             </VStack>
   
             <Button
+            type="submit"
               mt={10}
               onClick={onLogin}
               isLoading={loading}

@@ -16,6 +16,7 @@ import {
     VStack,
     Button,
     Divider,
+    Image,
   } from "@chakra-ui/react";
   import { ReactNode, useEffect, useState } from "react";
   import router from "next/router";
@@ -110,9 +111,10 @@ import {
       >
         <VStack px="4" py="5" align="center">
           {/* <Logo /> */}
-          <Text fontSize="2xl" ml="2" color={"gray.50"} fontWeight="bold">
+          <Box w={100}><Image src="/logo_sibimta.png"/></Box>
+          {/* <Text fontSize="2xl" ml="2" color={"gray.50"} fontWeight="bold">
             SIBIMTA
-          </Text>
+          </Text> */}
           <Divider />
         </VStack>
         <Flex

@@ -5,6 +5,7 @@ import { ChakraProvider } from '@chakra-ui/react'
 import Login from './login'
 import { auth } from "../config/firebase";
 import { useAuthState } from "react-firebase-hooks/auth";
+import Head from 'next/head';
 
 const SidebarContents = dynamic(() => import("../component/sidebar"), {
   ssr: false,
@@ -16,6 +17,8 @@ if (loading) return <span>Loading...</span>;
 if (user) {
   return(
     <ChakraProvider resetCSS>
+      
+      <Head ><title>SIBIMTA</title></Head>
       <SidebarContents>
         <Component {...pageProps} />
       </SidebarContents>
@@ -24,6 +27,7 @@ if (user) {
 }
 return (
   <ChakraProvider resetCSS>
+      <Head ><title>SIBIMTA</title></Head>
     <Login />
   </ChakraProvider>
 ); 
