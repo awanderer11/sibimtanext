@@ -218,6 +218,10 @@ import {
               My Profile
             </NavItem>
             <Divider />
+            <NavItem icon={BsFillBookFill} link="/view/judulskripsi">
+              Judul Skripsi
+            </NavItem>
+            <Divider />
             <NavItem icon={BsFillChatLeftQuoteFill} onClick={() => router.push(`/mahasiswa/pengajuanjudul/${nim}`)}>
               Pengajuan Judul
             </NavItem>
@@ -236,10 +240,7 @@ import {
               Laporan
             </NavItem>
             <Divider />
-            <NavItem icon={BsFillBookFill} link="/view/judulskripsi">
-              Judul Skripsi
-            </NavItem>
-            <Divider />
+            
             <NavItem icon={BsFillBookmarksFill} link="/administrasi">
               Administrasi
             </NavItem>

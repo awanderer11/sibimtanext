@@ -112,16 +112,16 @@ import {
     };
   
     return (
-      <Box bg="#12B2B3" h={"100vh"}>
+      <Box bg="#12B2B3" h={"50vh"} w={[500, 1000, 1500]}>
         <VStack spacing={10}>
           <Heading
-            w={600}
+            w={500}
             textAlign={"center"}
             mt={"10vh"}
             color={"white"}
             textTransform={"capitalize"}
           >
-            Bimbingan TA/Skripsi Online
+            Sistem Bimbingan Tugas Akhir TP FIP UNM
           </Heading>
           <VStack
             mt={"30vh"}
