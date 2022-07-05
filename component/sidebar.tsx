@@ -34,18 +34,22 @@ import {
     const [roles, setRoles] = useState("")
     const [nim, setnim] = useState("")
     const [nip, setnip] = useState("")
+    const [imageUrl, setImageUrl] = useState("")
 
     useEffect(() => {
           async function fetch() {
             let roles = ''
             let nim = ''
             let nip = ''
+            let img_url = ''
               db.collection(`/data-mahasiswa`).where('email', '==', auth.currentUser?.email).get().then((docs) => {
                 if(docs.empty) {
                   db.collection('/data-dosen').where('email', '==', auth.currentUser?.email).get().then((v) => {
                       v.forEach((b) => {
                         roles = b.data().roles
                         nip = b.data().nip
+                        img_url = b.data().img_url
+                        setImageUrl(b.data().img_url)
                         setRoles(b.data().roles)
                         setnip(b.data().nip)
                       })
@@ -55,9 +59,10 @@ import {
                 docs.forEach((vv) => {
                   roles = vv.data().roles
                   nim = vv.data().nim
+                  img_url = vv.data().img_url
+                  setImageUrl(vv.data().img_url)
                   setRoles(vv.data().roles)
                   setnim(vv.data().nim)
-                  
                 })
               })
           }
@@ -110,11 +115,8 @@ import {
         {...props}
       >
         <VStack px="4" py="5" align="center">
-          {/* <Logo /> */}
           <Box w={100}><Image src="/logo_sibimta.png"/></Box>
-          {/* <Text fontSize="2xl" ml="2" color={"gray.50"} fontWeight="bold">
-            SIBIMTA
-          </Text> */}
+          
           <Divider />
         </VStack>
         <Flex
@@ -305,7 +307,7 @@ import {
             <Spacer />
             <HStack>
               <Text color="black">{auth.currentUser?.email}</Text>
-              <Avatar name={String(auth.currentUser?.email)} />
+              <Avatar src={imageUrl} />
             </HStack>
           </Flex>
   

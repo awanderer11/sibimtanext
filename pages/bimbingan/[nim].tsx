@@ -33,6 +33,7 @@ const Room = () => {
   const [state, setState] = useState<any[]>([]);
   const [valMessage, setValMessage] = useState("");
   const [dosen, setDosen] = useState<any[]>([]);
+  const [imageUrl, setImageUrl] = useState("");
   const [mhs, setMhs] = useState({
     nim: "",
     nama: "",
@@ -87,13 +88,27 @@ const Room = () => {
   }, []);
 
   const onSubmit = async () => {
+    await db.collection(`/data-mahasiswa`).where('email', '==', auth.currentUser?.email).get().then((docs) => {
+      if(docs.empty) {
+        db.collection('/data-dosen').where('email', '==', auth.currentUser?.email).get().then((v) => {
+            v.forEach((d) => {
+              setImageUrl(d.data().img_url)
+            })
+        })
+        return;
+      }
+      docs.forEach((m) => {
+        setImageUrl(m.data().img_url)
+      })
+    })
+    if(valMessage != ""){
     setLoading(true);
-    await db.doc(`data-mahasiswa/${router.query.nim}`)
+      await db.doc(`data-mahasiswa/${router.query.nim}`)
       .collection(`chat`)
-      .add({ username: auth.currentUser?.email , message: valMessage, created_at:Date.now().toString(),})
+      .add({ username: auth.currentUser?.email , message: valMessage, created_at:Date.now().toString(), img_sender: imageUrl })
       .then(() => {
         toast({
-          description: "Post Berhasil",
+          description: "Post Berhasil ",
           status: "success",
         });
         setLoading(false);
@@ -102,7 +117,8 @@ const Room = () => {
       .catch((e) => {
         console.log(e);
       });
-    setLoading(false);
+      setLoading(false);
+    }
   };
 
   const onChangeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
@@ -157,22 +173,22 @@ const Room = () => {
         if(it.username === auth.currentUser?.email){
          return (
             <Box mt={2} bg='white' p={2} color='black'>
-                    <VStack align={'end'}>
+                <VStack align={'end'}>
                  <HStack align={'end'}>
                     <VStack align={'end'}>
                     <Box bg='#F7FAFC'>{it.username}</Box>
                     <Box bg='#F7FAFC'>{it.message}</Box>
                     </VStack>
-                   <Avatar  src={it.username} name={it.username} />
+                   <Avatar  src={it.img_sender}  />
                  </HStack>
-                  </VStack>
+                </VStack>
              </Box>
           )
         } else{
          return (
             <Box  mt={2} bg='white' p={2} color='black'>
                  <HStack align={'end'}>
-                   <Avatar  src={it.username} name={it.username} />
+                   <Avatar  src={it.img_sender} />
                     <VStack align={'start'}>
                     <Box bg='#F7FAFC'>{it.username}</Box>
                     <Box bg='#F7FAFC'>{it.message}</Box>
