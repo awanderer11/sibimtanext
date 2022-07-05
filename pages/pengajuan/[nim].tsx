@@ -47,41 +47,44 @@ const AjukanJudul = () => {
   }, []);
 
   const onSubmitCHat = async () => {
-    setLoading(true);
-    await db.doc(`data-mahasiswa/${router.query.nim}`)
-      .collection(`chat`)
-      .add({ username: auth.currentUser?.email , message: valMessage, created_at:Date.now().toString(),})
-      .then(() => {
-        toast({
-          description: "Post Berhasil",
-          status: "success",
+    if (valMessage != ""){
+      setLoading(true);
+      await db.doc(`data-mahasiswa/${router.query.nim}`)
+        .collection(`chat`)
+        .add({ username: auth.currentUser?.email , message: valMessage, created_at:Date.now().toString(), img_sender: state.img_url})
+        .then(() => {
+          toast({
+            description: "Post Berhasil",
+            status: "success",
+          });
+          setLoading(false);
+          setValMessage("");
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        setLoading(false);
-        setValMessage("");
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setLoading(false);
+      setLoading(false);
+    }
+    
   };
 
-  const onSubmit = async (nim: string) => {
-    setLoading(true);
-    await db
-      .doc(`data-mahasiswa/${nim}`)
-      .update({...state, judul:{judul: state.judul.judul, created_at: state.judul.created_at, updated_at:new Date().toLocaleDateString().substring(0, 10)}})
-      .then(() => {
-        toast({
-          description: "Berhasil",
-          status: "success",
-        });
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setLoading(false);
-  };
+  // const onSubmit = async (nim: string) => {
+  //   setLoading(true);
+  //   await db
+  //     .doc(`data-mahasiswa/${nim}`)
+  //     .update({...state, judul:{judul: state.judul.judul, created_at: state.judul.created_at, updated_at:new Date().toLocaleDateString().substring(0, 10)}})
+  //     .then(() => {
+  //       toast({
+  //         description: "Berhasil",
+  //         status: "success",
+  //       });
+  //       setLoading(false);
+  //     })
+  //     .catch((e) => {
+  //       console.log(e);
+  //     });
+  //   setLoading(false);
+  // };
 
   return (
     <SimpleGrid columns={2} spacing={10}>
@@ -163,7 +166,7 @@ const AjukanJudul = () => {
                     <Box bg='#F7FAFC'>{it.username}</Box>
                     <Box bg='#F7FAFC'>{it.message}</Box>
                     </VStack>
-                   <Avatar  src={it.username} name={it.username}  />
+                   <Avatar  src={it.img_sender}   />
                  </HStack>
                   </VStack>
              </Box>
@@ -172,7 +175,7 @@ const AjukanJudul = () => {
          return (
             <Box  mt={2} bg='white' p={2} color='black'>
                  <HStack align={'end'}>
-                   <Avatar  src={ it.username } name={ it.username } />
+                   <Avatar  src={ it.img_sender }  />
                     <VStack align={'start'}>
                     <Box bg='#F7FAFC'>{ it.username }</Box>
                     <Box bg='#F7FAFC'>{it.message}</Box>

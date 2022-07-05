@@ -88,17 +88,9 @@ const Room = () => {
   }, []);
 
   const onSubmit = async () => {
-    await db.collection(`/data-mahasiswa`).where('email', '==', auth.currentUser?.email).get().then((docs) => {
-      if(docs.empty) {
-        db.collection('/data-dosen').where('email', '==', auth.currentUser?.email).get().then((v) => {
-            v.forEach((d) => {
-              setImageUrl(d.data().img_url)
-            })
-        })
-        return;
-      }
-      docs.forEach((m) => {
-        setImageUrl(m.data().img_url)
+    await db.collection(`/data-dosen`).where('email', '==', auth.currentUser?.email).get().then((docs) => {
+      docs.forEach((d) => {
+        setImageUrl(d.data().img_url)
       })
     })
     if(valMessage != ""){
