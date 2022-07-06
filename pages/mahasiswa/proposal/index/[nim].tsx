@@ -56,9 +56,8 @@ import {
                 <Td>{state.nim}</Td>
                 <Td>{state.nama}</Td>
                 <Td>{state.judul.judul}</Td>
-                {/* <Td>{state.pembimbing1.nama}</Td> */}
-                <Td _hover={{cursor:"pointer"}} onClick={() => router.push(`/mahasiswa/proposal/${state.nim}`)} >{state.pembimbing1.nama}</Td>
-                <Td _hover={{cursor:"pointer"}} onClick={() => router.push(`/mahasiswa/proposal/${state.nim}`)} >{state.pembimbing2.nama}</Td>
+                <Td _hover={{cursor:"pointer"}} onClick={() => router.push({pathname:`/mahasiswa/proposal/${state.nim}`, query:{nip: state.pembimbing1.nip}})} >{state.pembimbing1.nama}</Td>
+                <Td _hover={{cursor:"pointer"}} onClick={() => router.push({pathname:`/mahasiswa/proposal/${state.nim}`, query:{nip: state.pembimbing2.nip}})} >{state.pembimbing2.nama}</Td>
               </Tr>
           </Tbody>
         </Table>

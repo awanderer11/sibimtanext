@@ -70,7 +70,8 @@ useEffect(() => {
 
 useEffect(() => {
   async function fetch() {
-    db.collection(`data-mahasiswa/${router.query.nim}/tutup`).onSnapshot((docs) => {
+    let nip = router.query.nip;
+    db.collection(`data-mahasiswa/${router.query.nim}/tutup`).where("nip", "==", nip).onSnapshot((docs) => {
       const data: any[] = [];
       docs.forEach((it) => {
         data.push({

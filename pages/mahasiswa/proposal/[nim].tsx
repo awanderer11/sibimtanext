@@ -60,6 +60,7 @@ useEffect(() => {
       .get()
       .then((docs) => {
         setState({ ...(docs.data() as any) });
+        console.log(router.query)
       })
       .catch((e) => {
         console.log(e);
@@ -69,8 +70,9 @@ useEffect(() => {
 }, []);
 
 useEffect(() => {
+  let nip = router.query.nip;
   async function fetch() {
-    db.collection(`data-mahasiswa/${router.query.nim}/proposal`).onSnapshot((docs) => {
+    db.collection(`data-mahasiswa/${router.query.nim}/proposal`).where('nip', "==", nip).onSnapshot((docs) => {
       const data: any[] = [];
       docs.forEach((it) => {
         data.push({
@@ -87,7 +89,8 @@ const onSubmit = async () => {
   setLoading(true);
   const id = Date.now().toString();
   await db.doc(`data-mahasiswa/${router.query.nim}/proposal/${id}`)
-    .set({ topikBahasan: valMessage, tglBimbingan: new Date().toLocaleDateString().substring(0, 10),
+    .set({ topikBahasan: valMessage, 
+      tglBimbingan: new Date().toLocaleDateString().substring(0, 10),
             fileUrl: "",
             imgUrl: "",
             keterangan: "",

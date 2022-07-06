@@ -28,7 +28,7 @@ import {
 } from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { FiLogIn, FiPlus } from "react-icons/fi";
-import { db, FirebaseApp } from "../../../config/firebase";
+import { db, auth } from "../../../config/firebase";
 import router from "next/router";
 
 const Tutup = () => {
@@ -72,7 +72,13 @@ useEffect(() => {
 
 useEffect(() => {
   async function fetch() {
-    db.collection(`data-mahasiswa/${router.query.nim}/tutup`).onSnapshot((docs) => {
+    let nip = "";
+      await db.collection("data-dosen").where("email", "==", auth.currentUser?.email).get().then((d)=>{
+           d.forEach((d) => {
+          nip = d.data().nip
+           })
+       })
+    db.collection(`data-mahasiswa/${router.query.nim}/tutup`).where("nip", "==", nip).onSnapshot((docs) => {
       const data: any[] = [];
       docs.forEach((it) => {
         data.push({
