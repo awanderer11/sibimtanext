@@ -89,7 +89,8 @@ const Proposal = () => {
     setLoading(true);
     const id = Date.now().toString();
     await db.doc(`data-mahasiswa/${router.query.nim}/proposal/${id}`)
-      .set({ topikBahasan: valMessage, tglBimbingan: new Date().toLocaleDateString().substring(0, 10),
+      .set({ topikBahasan: valMessage, 
+              tglBimbingan: new Date().toLocaleDateString().substring(0, 10),
               fileUrl: "",
               imgUrl: "",
               keterangan: "",

@@ -7,12 +7,9 @@ import {
     Th,
     Thead,
     Tr,
-    useToast,
-    IconButton
   } from "@chakra-ui/react";
   import React, { useEffect, useState } from "react";
-  import { db, auth } from "../../../../config/firebase";
-  import { FiLogIn } from "react-icons/fi";
+  import { db } from "../../../../config/firebase";
   import router from "next/router";
   
   const Proposal = () => {
@@ -59,7 +56,8 @@ import {
                 <Td>{state.nim}</Td>
                 <Td>{state.nama}</Td>
                 <Td>{state.judul.judul}</Td>
-                <Td>{state.pembimbing1.nama}</Td>
+                {/* <Td>{state.pembimbing1.nama}</Td> */}
+                <Td _hover={{cursor:"pointer"}} onClick={() => router.push(`/mahasiswa/proposal/${state.nim}`)} >{state.pembimbing1.nama}</Td>
                 <Td _hover={{cursor:"pointer"}} onClick={() => router.push(`/mahasiswa/proposal/${state.nim}`)} >{state.pembimbing2.nama}</Td>
               </Tr>
           </Tbody>
