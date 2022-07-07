@@ -86,6 +86,7 @@ useEffect(() => {
 
 const onSubmit = async () => {
   setLoading(true);
+  let nip = router.query.nip;
   const id = Date.now().toString();
   await db.doc(`data-mahasiswa/${router.query.nim}/hasil/${id}`)
     .set({ topikBahasan: valMessage, tglBimbingan: new Date().toLocaleDateString().substring(0, 10),
@@ -95,6 +96,7 @@ const onSubmit = async () => {
             review: "",
             status: "",
             id:  id,
+            nip: nip,
     })
     .then(() => {
       toast({
