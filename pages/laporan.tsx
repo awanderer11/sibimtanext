@@ -10,22 +10,51 @@ import {
   useToast,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
-import { db } from "../config/firebase";
+import { db, auth } from "../config/firebase";
 import { Checkbox } from '@chakra-ui/react'
 const Laporan = () => {
   const [state, setState] = useState<any[]>([]);
   const toast = useToast();
   useEffect(() => {
     async function fetch() {
-      db.collection("data-mahasiswa").onSnapshot((docs) => {
-        const data: any[] = [];
-        docs.forEach((it) => {
-          data.push({
-            ...it.data(),
+      if(auth.currentUser?.email ==="sibimta@email.com"){
+        db.collection("data-mahasiswa").onSnapshot((docs) => {
+          const data: any[] = [];
+          docs.forEach((it) => {
+            data.push({
+              ...it.data(),
+            });
           });
+          setState(data);
         });
-        setState(data);
-      });
+      }else{
+        const data1: any[] = [];
+        const data2: any[] = [];
+        db.collection("data-dosen").where("email", "==", auth.currentUser?.email).get().then((d)=>{
+          let nips  = ''
+          let isLogin = false
+            d.forEach((d) => {
+           isLogin = d.data().isLogin
+           nips = d.data().nip
+            })
+            db.collection("data-mahasiswa").where("nip1", "==", nips).onSnapshot((docs) => {
+              docs.forEach((it) => {
+                data1.push({
+                  ...it.data(),
+                });
+              });
+            });
+            db.collection("data-mahasiswa").where("nip2", "==", nips).onSnapshot((docs) => {
+              docs.forEach((it) => {
+                data2.push({
+                  ...it.data(),
+                });
+              });
+              let data = data1.concat(data2);
+              setState(data);
+            });
+        })
+      }
     }
     fetch();
   }, []);

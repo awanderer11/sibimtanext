@@ -32,31 +32,29 @@ const Hasil = () => {
         });
       }
       else{
-        db.collection("data-dosen").where("email", "==", auth.currentUser?.email).get().then((vd)=>{
+        const data1: any[] = [];
+        const data2: any[] = [];
+        db.collection("data-dosen").where("email", "==", auth.currentUser?.email).get().then((d)=>{
           let nips  = ''
           let isLogin = false
-            vd.forEach((b) => {
-           isLogin = b.data().isLogin
-           nips = b.data().nip
+            d.forEach((d) => {
+           isLogin = d.data().isLogin
+           nips = d.data().nip
             })
             db.collection("data-mahasiswa").where("nip1", "==", nips).onSnapshot((docs) => {
-              if(docs.empty){
-                db.collection("data-mahasiswa").where("nip2", "==", nips).onSnapshot((docsv) => {
-                  const data: any[] = [];
-                  docsv.forEach((it) => {
-                    data.push({
-                      ...it.data(),
-                    });
-                  });
-                  setState(data);
-                });
-              }
-              const data: any[] = [];
               docs.forEach((it) => {
-                data.push({
+                data1.push({
                   ...it.data(),
                 });
               });
+            });
+            db.collection("data-mahasiswa").where("nip2", "==", nips).onSnapshot((docs) => {
+              docs.forEach((it) => {
+                data2.push({
+                  ...it.data(),
+                });
+              });
+              let data = data1.concat(data2);
               setState(data);
             });
         })
@@ -96,6 +94,7 @@ const Hasil = () => {
                     aria-label="icon"
                     icon={<FiLogIn />}
                     onClick={() => router.push(`/dosen/hasil/${it.nim}`)}
+                    disabled={!it.sempro}
                   /></Td>
             </Tr>
           ))}

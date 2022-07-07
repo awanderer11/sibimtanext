@@ -93,7 +93,9 @@ const Proposal = () => {
                     aria-label="icon"
                     icon={<FiLogIn />}
                     onClick={() => router.push(`/dosen/proposal/${it.nim}`)}
-                  /></Td>
+                    isDisabled={it.pembimbing2.nama == "" ? true : false}
+                  />
+                  </Td>
             </Tr>
           ))}
         </Tbody>
