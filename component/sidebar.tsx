@@ -205,10 +205,10 @@ import {
             Judul Skripsi
           </NavItem>
           <Divider />
-          <NavItem icon={BsFillBookmarksFill} link="/administrasi">
+          {/* <NavItem icon={BsFillBookmarksFill} link="/administrasi">
             Administrasi
           </NavItem>
-          <Divider />
+          <Divider /> */}
               </>
           )}    
 
@@ -245,7 +245,7 @@ import {
             </NavItem>
             <Divider />
             
-            <NavItem icon={BsFillBookmarksFill} link="/administrasi">
+            <NavItem icon={BsFillBookmarksFill} link="/mahasiswa/administrasi">
               Administrasi
             </NavItem>
             <Divider />

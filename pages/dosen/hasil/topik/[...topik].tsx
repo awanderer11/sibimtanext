@@ -139,16 +139,9 @@ const Hasil = () => {
         <Input type='tel' placeholder=''   value={stateMhs.tglBimbingan} 
         />
         </InputGroup>
-
-       
-    
-      
       </>
-     
-        
     </Container>
     <Container>
-      
         <InputGroup mt={2}>
         <InputLeftAddon children='Topik Bahasan' />
         <Input type='tel' placeholder=''   value={stateMhs.topikBahasan} 
@@ -158,6 +151,7 @@ const Hasil = () => {
         <InputLeftAddon children='Unduh Berkas' />
         <a target="_blank" href={stateMhs.fileUrl} rel="noopener noreferrer"> 
         <IconButton
+        isDisabled={stateMhs.fileUrl == "" ? true : false}
          aria-label="icon"
         icon={ <FiDownload />}
           />
@@ -168,6 +162,7 @@ const Hasil = () => {
       
       <a target="_blank" href={stateMhs.imgUrl} rel="noopener noreferrer"> 
       <IconButton
+      isDisabled={stateMhs.imgUrl == "" ? true : false}
       aria-label="icon"
       icon={ <FiDownload />}
         />

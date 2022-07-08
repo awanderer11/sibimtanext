@@ -2,21 +2,13 @@ import type { NextPage } from 'next'
 import { 
   useToast,
   SimpleGrid, 
-  Table,
-  Th,
-  Thead,
-  Tr, 
-  Tbody,
-  Td, 
-  IconButton,
   Button,
   HStack,
 } from "@chakra-ui/react";
-import { FiDownload, FiTrash2, FiPlus } from "react-icons/fi";
-
+import FilePick from "../../component/fiepick";
 import React, { useState, useEffect } from "react";
-import { db, FirebaseApp } from "../config/firebase";
-
+import { db, FirebaseApp } from "../../config/firebase";
+import { InputWihtText } from "../../component/InputText";
 import router from "next/router";
 
 const Administrasi: NextPage = () => {
@@ -26,28 +18,13 @@ const Administrasi: NextPage = () => {
     "https://via.placeholder.com/150"
   );
   const [loading, setLoading] = useState(false);
-  const [state, setState] = useState<any[]>([]);
-  const idNow =  Date.now().toString();
   const [stateb, setStateb] = useState({
-    id: "",
+    id: Date.now().toString(),
     fileName: "",
     fileUrl:"",
     created_at: Date.now().toString(),
     updated_at: Date.now().toString(),
   });
-
-  useEffect(() => {
-    async function fetch() {
-      db.collection(`administrasi`).orderBy("created_at", "desc" ).onSnapshot((v) => {
-        const data: any[]= []
-        v.forEach((vv) => {
-          data.push({...vv.data()})
-        })
-        setState(data)
-      })
-    }
-    fetch();
-  }, []);
 
 
   const onSelectFile = (e: (EventTarget & HTMLInputElement) | null) => {
@@ -77,7 +54,6 @@ const Administrasi: NextPage = () => {
       .put(selectedFile, metadata);
       const fileUrl = await snapshot.ref.getDownloadURL();
       if(fileUrl != ""){
-      setStateb({...stateb, fileUrl: fileUrl, created_at: idNow, id: idNow })
       await db
       .doc(`administrasi/${stateb.id}`)
       .get()
@@ -96,6 +72,7 @@ const Administrasi: NextPage = () => {
             status: "success",
           });
           setLoading(false);
+          router.push(`/administrasi`)
         }
       });
      
@@ -103,67 +80,39 @@ const Administrasi: NextPage = () => {
    }
   };
 
-  const onDelete = async (id: string) => {
-    await db
-      .doc(`administrasi/${id}`)
-      .delete()
-      .then(() => {
-        toast({
-          description: "Berhasil Hapus Data",
-          status: "success",
-        });
-      })
-      .catch((e) => {
-        toast({
-          description: "Gagal Hapus Data",
-          status: "error",
-        });
-      });
-  };
 
   return (
     <div>
+    <SimpleGrid >
+    <InputWihtText
+        title="Nama File"
+        value={stateb.fileName}
+        onChange={(e) =>
+          setStateb((prev) => ({ ...prev, fileName: e.target.value }))
+        }
+      />
+      <HStack mt={4}>
+      
+     <FilePick
+      onChange={(e) => onSelectFile(e.target)}
+      />
       <Button
         mt={4}
-        leftIcon={<FiPlus />}
         colorScheme={"green"}
-        onClick={()=>router.push(`/tambah/administrasi`)}
+        onClick={()=>onSubmitBerkas()}
       >
-         File
+         Simpan
      </Button>
-    
-    <Table variant="striped" size={"sm"} mt={5}>
-        <Thead>
-          <Tr>
-            <Th>No.</Th>
-            <Th>Nama File</Th>
-            <Th>Aksi</Th>
-          </Tr>
-        </Thead>
-        <Tbody>
-          {state.map((it, id) => (
-            <Tr key={id}>
-              <Td>{id + 1}</Td>
-              <Td>{it.fileName}</Td>
-              <Td>
-                <HStack>
-                <a target="_blank" href={it.fileUrl} rel="noopener noreferrer"> 
-                  <IconButton
-                    aria-label="icon"
-                    icon={<FiDownload />}
-                  />
-                  </a>
-                  <IconButton
-                    aria-label="icon"
-                    onClick={() => onDelete(it.id)}
-                    icon={<FiTrash2 />}
-                  />
-                </HStack>
-              </Td>
-            </Tr>
-          ))}
-        </Tbody>
-      </Table>
+     <Button
+      mt={2}
+          marginLeft={4}
+          colorScheme={"green"}
+        onClick={() => router.back()}
+        >
+          Kembali
+        </Button>
+      </HStack>
+    </SimpleGrid>
     </div>
   )
 }

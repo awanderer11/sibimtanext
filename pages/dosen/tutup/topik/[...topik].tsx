@@ -147,6 +147,7 @@ const tutup = () => {
         <InputLeftAddon children='Unduh Berkas' />
         <a target="_blank" href={stateMhs.fileUrl} rel="noopener noreferrer"> 
         <IconButton
+        isDisabled={stateMhs.fileUrl == "" ? true : false}
          aria-label="icon"
         icon={ <FiDownload />}
           />
@@ -157,6 +158,7 @@ const tutup = () => {
       
       <a target="_blank" href={stateMhs.imgUrl} rel="noopener noreferrer"> 
       <IconButton
+      isDisabled={stateMhs.imgUrl == "" ? true : false}
       aria-label="icon"
       icon={ <FiDownload />}
         />

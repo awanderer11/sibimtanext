@@ -8,7 +8,7 @@ const Judul = () => {
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
-    id: "",
+    id: Date.now().toString(),
     tahun: "",
     judul: "",
     created_at: Date.now().toString(),
@@ -54,11 +54,6 @@ const Judul = () => {
  
   return (
     <Container maxW={"container.xl"}>
-      <InputWihtText
-        title="ID"
-        value={state.id}
-        onChange={(e) => setState((prev) => ({ ...prev, id: e.target.value }))}
-      />
       <InputWihtText
         title="Tahun"
         value={state.tahun}
