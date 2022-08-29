@@ -253,7 +253,7 @@ const Proposal = () => {
         </ModalBody>
         <ModalFooter>
           <Button colorScheme='blue' mr={3} onClick={() => onSubmitBerkas(stateMhs.id)}>
-            Kirim
+            Simpan
           </Button>
           <Button onClick={onClose}>Batal</Button>
         </ModalFooter>

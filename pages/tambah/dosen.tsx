@@ -1,10 +1,24 @@
-import { Container, Button, useToast } from "@chakra-ui/react";
+import { Container, 
+  Button, 
+  useToast,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalHeader,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Box
+ } from "@chakra-ui/react";
 import React, { useState } from "react";
 import { InputWihtText } from "../../component/InputText";
 import { db } from "../../config/firebase";
 import router from "next/router";
 
+
 const Dosen = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
@@ -95,11 +109,32 @@ const Dosen = () => {
         colorScheme={"green"}
         color={"white"}
         mt={10}
-        onClick={onSubmit}
+        onClick={onOpen}
         isLoading={loading}
       >
         Tambah
       </Button>
+      <Box>
+      <Modal
+       isOpen={isOpen}
+       onClose={onClose}
+         >
+        <ModalOverlay />
+       <ModalContent>
+        <ModalHeader>Tambah dosen?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={onSubmit}>
+            Simpan
+          </Button>
+          <Button onClick={onClose}>Batal</Button>
+        </ModalFooter>
+       </ModalContent>
+       </Modal>
+      </Box>
+     
     </Container>
   );
 };

@@ -1,10 +1,22 @@
-import { Container, Button, useToast } from "@chakra-ui/react";
+import { Container, 
+  Button, 
+  useToast,
+  useDisclosure, 
+  Modal,
+  ModalOverlay,
+  ModalHeader,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Box,} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { InputWihtText } from "../../component/InputText";
 import { db } from "../../config/firebase";
 import router from "next/router";
 
 const Judul = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
@@ -19,7 +31,14 @@ const Judul = () => {
     setLoading(true);
     console.log(state)
     try {
-      await db
+      if(state.judul === "" && state.tahun === ""){
+        toast({
+          description: "judul dan tahun tidak boleh kosong!",
+          status: "error",
+        });
+      }
+      else{
+        await db
         .doc(`judulskripsi/${state.id}`)
         .get()
         .then((docs) => {
@@ -41,6 +60,7 @@ const Judul = () => {
           }
         });
         router.push(`/judulskripsi`)
+      }
     } catch (error: any) {
       setLoading(false);
       toast({
@@ -70,11 +90,31 @@ const Judul = () => {
         colorScheme={"green"}
         color={"white"}
         mt={10}
-        onClick={onSubmit}
+        onClick={onOpen}
         isLoading={loading}
       >
         Tambah
       </Button>
+      <Box>
+      <Modal
+       isOpen={isOpen}
+       onClose={onClose}
+         >
+        <ModalOverlay />
+       <ModalContent>
+        <ModalHeader>Tambah judul skripsi?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={onSubmit}>
+            Simpan
+          </Button>
+          <Button onClick={onClose}>Batal</Button>
+        </ModalFooter>
+       </ModalContent>
+       </Modal>
+      </Box>
     </Container>
   );
 };

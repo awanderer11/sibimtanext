@@ -4,14 +4,23 @@ import {
   SimpleGrid, 
   Button,
   HStack,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalHeader,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
 } from "@chakra-ui/react";
 import FilePick from "../../component/fiepick";
-import React, { useState, useEffect } from "react";
+import React, { useState, } from "react";
 import { db, FirebaseApp } from "../../config/firebase";
 import { InputWihtText } from "../../component/InputText";
 import router from "next/router";
 
 const Administrasi: NextPage = () => {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const toast = useToast();
   const [selectedFile, setSelectedFile] = useState<any>(undefined);
   const [preview, setPreview] = useState<any>(
@@ -21,7 +30,7 @@ const Administrasi: NextPage = () => {
   const [stateb, setStateb] = useState({
     id: Date.now().toString(),
     fileName: "",
-    fileUrl:"",
+    fileUrl: "",
     created_at: Date.now().toString(),
     updated_at: Date.now().toString(),
   });
@@ -40,47 +49,44 @@ const Administrasi: NextPage = () => {
     }
   };
 
-  const onSubmitBerkas = async () => {
+  const onSubmit = async () => {
     setLoading(true);
-   if(stateb.fileName !="" && preview != ""){
-    const metadata = {
-      contentType: "application/docx",
-    };
-    const snapshot = await FirebaseApp.storage()
-      .ref()
-      .child(
-        `/file/administrasi/${Date.now().toString()}-administrasi.docx`
-      )
-      .put(selectedFile, metadata);
-      const fileUrl = await snapshot.ref.getDownloadURL();
-      if(fileUrl != ""){
-      await db
-      .doc(`administrasi/${stateb.id}`)
-      .get()
-      .then((docs) => {
-        if (docs.exists) {
-          toast({
-            description: "file telah terdaftar",
-            status: "error",
-          });
-          setLoading(false);
-          return;
-        } else {
-          db.doc(`administrasi/${stateb.id}`).set(stateb);
-          toast({
-            description: "Tambah Data Sukses",
-            status: "success",
-          });
-          setLoading(false);
-          router.push(`/administrasi`)
-        }
-      });
-     
-    }
-   }
+    console.log(stateb.fileName);
+    console.log(selectedFile);
+      if(stateb.fileName === "" ){
+        toast({
+          description: "Nama file tidak boleh kosong!",
+          status: "error",
+        });
+      }else if(
+        selectedFile === undefined
+      ){
+        toast({
+          description: "File tidak boleh kosong!",
+          status: "error",
+        });
+      }
+      else{
+        const metadata = {
+          contentType: "application/docx",
+        };
+        const snapshot = await FirebaseApp.storage()
+          .ref()
+          .child(
+            `/file/administrasi/${Date.now().toString()}-administrasi.docx`
+          )
+          .put(selectedFile, metadata);
+          const url = await snapshot.ref.getDownloadURL();
+            db.doc(`administrasi/${stateb.id}`).set({...stateb, fileUrl: url});
+            toast({
+              description: "Tambah Data Sukses",
+              status: "success",
+            });
+            setLoading(false);
+            router.push(`/administrasi`)
+      }
+  
   };
-
-
   return (
     <div>
     <SimpleGrid >
@@ -99,7 +105,7 @@ const Administrasi: NextPage = () => {
       <Button
         mt={4}
         colorScheme={"green"}
-        onClick={()=>onSubmitBerkas()}
+        onClick={onOpen}
       >
          Simpan
      </Button>
@@ -112,6 +118,24 @@ const Administrasi: NextPage = () => {
           Kembali
         </Button>
       </HStack>
+      <Modal
+       isOpen={isOpen}
+       onClose={onClose}
+         >
+        <ModalOverlay />
+       <ModalContent>
+        <ModalHeader>Tambah file?</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody pb={6}>
+        </ModalBody>
+        <ModalFooter>
+          <Button colorScheme='blue' mr={3} onClick={onSubmit}>
+            Simpan
+          </Button>
+          <Button onClick={onClose}>Batal</Button>
+        </ModalFooter>
+       </ModalContent>
+       </Modal>
     </SimpleGrid>
     </div>
   )
