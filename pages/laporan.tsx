@@ -8,13 +8,11 @@ import {
   Thead,
   Tr,
   useToast,
-  IconButton,
 } from "@chakra-ui/react";
-import router from "next/router";
-import { FiDownload } from "react-icons/fi";
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../config/firebase";
 import { Checkbox } from "@chakra-ui/react";
+
 const Laporan = () => {
   const [state, setState] = useState<any[]>([]);
   const toast = useToast();
@@ -83,7 +81,6 @@ const Laporan = () => {
             <Th>SEMHAS</Th>
             <Th>Tutup</Th>
             <Th>Yudisium</Th>
-            <Th>Unduh Laporan</Th>
           </Tr>
         </Thead>
         <Tbody>
@@ -103,14 +100,6 @@ const Laporan = () => {
               </Td>
               <Td>
                 <Checkbox isChecked={it.yudisium} isDisabled></Checkbox>
-              </Td>
-              <Td>
-                <IconButton
-                  aria-label="icon"
-                  icon={<FiDownload />}
-                  onClick={() => router.push(`/dosen/proposal/${it.nim}`)}
-                  isDisabled={it.yudisium == "" ? true : false}
-                />
               </Td>
             </Tr>
           ))}
