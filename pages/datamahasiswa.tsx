@@ -79,8 +79,7 @@ const DataMahasiswa = () => {
         <Tbody>
           {state.map((it, id) => (
             <Tr key={id}>
-              
-              <Td>{id+1}</Td>
+              <Td>{id + 1}</Td>
               <Td>{it.nim}</Td>
               <Td>{it.nama}</Td>
               <Td>{it.tahunmasuk}</Td>

@@ -1,17 +1,18 @@
-import { 
-    Container, 
-    useToast,Box, 
-    InputGroup, 
-    Input,
-    InputLeftAddon, 
-    SimpleGrid, 
-    Select,
-    IconButton,
-    Button,
-    VStack,
-    HStack,
-    Textarea,
-    Modal, 
+import {
+  Container,
+  useToast,
+  Box,
+  InputGroup,
+  Input,
+  InputLeftAddon,
+  SimpleGrid,
+  Select,
+  IconButton,
+  Button,
+  VStack,
+  HStack,
+  Textarea,
+  Modal,
   ModalOverlay,
   ModalHeader,
   ModalBody,
@@ -19,7 +20,7 @@ import {
   ModalFooter,
   ModalCloseButton,
   useDisclosure,
- } from "@chakra-ui/react";
+} from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { FiImage, FiFile, FiDownload } from "react-icons/fi";
 import { db } from "../../../../config/firebase";
@@ -28,22 +29,22 @@ import router from "next/router";
 const Hasil = () => {
   const toast = useToast();
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const topik = router.query.topik || []
+  const topik = router.query.topik || [];
   const [loading, setLoading] = useState(false);
   const [stateMhs, setStateMhs] = useState({
-    id:"",
-    fileUrl:"",
-    imgUrl:"",
-    keterangan:"",
-    tglBimbingan:"",
-    review:"",
-    status:"",
-    topikBahasan:"",
+    id: "",
+    fileUrl: "",
+    imgUrl: "",
+    keterangan: "",
+    tglBimbingan: "",
+    review: "",
+    status: "",
+    topikBahasan: "",
   });
   const [state, setState] = useState({
     nim: "",
     nama: "",
-    judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
+    judul: { judul: "", created_at: "", updated_at: "", url: "" },
     tanggallahir: "",
     tahunmasuk: "",
     email: "",
@@ -51,8 +52,11 @@ const Hasil = () => {
     alamat: "",
     jeniskelamin: "",
     agama: "",
-    img_url:"",
-    prpsl:{bab1:{tglBimbingan:"", status:"", keterangan:""}, bab2:{tglBimbingan:"", status:"", keterangan:""}},
+    img_url: "",
+    prpsl: {
+      bab1: { tglBimbingan: "", status: "", keterangan: "" },
+      bab2: { tglBimbingan: "", status: "", keterangan: "" },
+    },
     updated_at: new Date().toISOString().substring(0, 10),
   });
 
@@ -74,7 +78,9 @@ const Hasil = () => {
   useEffect(() => {
     async function fetch() {
       await db
-        .doc(`data-mahasiswa/${topik[0]}`).collection("hasil").doc(`${topik[1]}`)
+        .doc(`data-mahasiswa/${topik[0]}`)
+        .collection("hasil")
+        .doc(`${topik[1]}`)
         .get()
         .then((docs) => {
           setStateMhs({ ...(docs.data() as any) });
@@ -86,144 +92,149 @@ const Hasil = () => {
     fetch();
   }, []);
 
-
   const onSubmit = async (id: string) => {
     setLoading(true);
     await db
-    .doc(`data-mahasiswa/${topik[0]}/hasil/${id}`)
-    .update(stateMhs)
-    .then(() => {
-      toast({
-        description: "Berhasil",
-        status: "success",
+      .doc(`data-mahasiswa/${topik[0]}/hasil/${id}`)
+      .update(stateMhs)
+      .then(() => {
+        toast({
+          description: "Berhasil",
+          status: "success",
+        });
+        setLoading(false);
+      })
+      .catch((e) => {
+        console.log(e);
       });
-      setLoading(false);
-    })
-    .catch((e) => {
-      console.log(e);
-    });
-    onClose()
-  setLoading(false);
-  return;
+    onClose();
+    setLoading(false);
+    return;
   };
 
   const onChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-     setStateMhs((prev: any) => ({ ...prev, status: e.target.value }))
-  }
+    setStateMhs((prev: any) => ({ ...prev, status: e.target.value }));
+  };
 
-  if(!stateMhs){
-    return <p>...Loading</p>
+  if (!stateMhs) {
+    return <p>...Loading</p>;
   }
 
   return (
     <SimpleGrid columns={2} spacing={10}>
-    <Container maxW={"container.xl"}>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='NIM' />
-        <Input type='tel' placeholder=''  value={state.nim} 
-        />
+      <Container maxW={"container.xl"}>
+        <InputGroup mt={2}>
+          <InputLeftAddon children="NIM" />
+          <Input type="tel" placeholder="" value={state.nim} />
         </InputGroup>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Nama' />
-        <Input type='tel' placeholder=''   value={state.nama} 
-        />
+        <InputGroup mt={2}>
+          <InputLeftAddon children="Nama" />
+          <Input type="tel" placeholder="" value={state.nama} />
         </InputGroup>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Judul' />
-        <Input type='tel' placeholder=''   value={state.judul.judul} 
-        />
+        <InputGroup mt={2}>
+          <InputLeftAddon children="Judul" />
+          <Input type="tel" placeholder="" value={state.judul.judul} />
         </InputGroup>
         <>
+          <InputGroup mt={2}>
+            <InputLeftAddon children="Tanggal Bimbingan" />
+            <Input type="tel" placeholder="" value={stateMhs.tglBimbingan} />
+          </InputGroup>
+        </>
+      </Container>
+      <Container>
         <InputGroup mt={2}>
-        <InputLeftAddon children='Tanggal Bimbingan' />
-        <Input type='tel' placeholder=''   value={stateMhs.tglBimbingan} 
-        />
-        </InputGroup>
-      </>
-    </Container>
-    <Container>
-        <InputGroup mt={2}>
-        <InputLeftAddon children='Topik Bahasan' />
-        <Input type='tel' placeholder=''   value={stateMhs.topikBahasan} 
-        />
+          <InputLeftAddon children="Topik Bahasan" />
+          <Input type="tel" placeholder="" value={stateMhs.topikBahasan} />
         </InputGroup>
         <InputGroup mt={2}>
-        <InputLeftAddon children='Unduh Berkas' />
-        <a target="_blank" href={stateMhs.fileUrl} rel="noopener noreferrer"> 
-        <IconButton
-        isDisabled={stateMhs.fileUrl == "" ? true : false}
-         aria-label="icon"
-        icon={ <FiDownload />}
-          />
-        </a>
+          <InputLeftAddon children="Unduh Berkas" />
+          <a target="_blank" href={stateMhs.fileUrl} rel="noopener noreferrer">
+            <IconButton
+              isDisabled={stateMhs.fileUrl == "" ? true : false}
+              aria-label="icon"
+              icon={<FiDownload />}
+            />
+          </a>
         </InputGroup>
         <InputGroup mt={2}>
-        <InputLeftAddon children='Unduh Media' />
-      
-      <a target="_blank" href={stateMhs.imgUrl} rel="noopener noreferrer"> 
-      <IconButton
-      isDisabled={stateMhs.imgUrl == "" ? true : false}
-      aria-label="icon"
-      icon={ <FiDownload />}
-        />
-      </a>
+          <InputLeftAddon children="Unduh Media" />
+
+          <a target="_blank" href={stateMhs.imgUrl} rel="noopener noreferrer">
+            <IconButton
+              isDisabled={stateMhs.imgUrl == "" ? true : false}
+              aria-label="icon"
+              icon={<FiDownload />}
+            />
+          </a>
         </InputGroup>
 
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Status Bimbingan' />
-        <Select value={stateMhs.status} onChange={(e)=> setStateMhs((prev: any) => ({ ...prev, status: e.target.value }))} placeholder='' >
-        <option value='Belum Direview'>Belum Direview</option>
-        <option value='Revisi'>Revisi</option>
-       <option value='ACC'> ACC</option>
-        </Select>
+        <InputGroup mt={2}>
+          <InputLeftAddon children="Status Bimbingan" />
+          <Select
+            value={stateMhs.status}
+            onChange={(e) =>
+              setStateMhs((prev: any) => ({ ...prev, status: e.target.value }))
+            }
+            placeholder=""
+          >
+            <option value="Belum Direview">Belum Direview</option>
+            <option value="Revisi">Revisi</option>
+            <option value="ACC"> ACC</option>
+          </Select>
         </InputGroup>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Keterangan' />
-        <Textarea onChange={(e) => setStateMhs((prev) => ({ ...prev, keterangan: e.target.value }))} value={stateMhs.keterangan} placeholder='Tulis keterangan'></Textarea>
+        <InputGroup mt={2}>
+          <InputLeftAddon children="Keterangan" />
+          <Textarea
+            onChange={(e) =>
+              setStateMhs((prev) => ({ ...prev, keterangan: e.target.value }))
+            }
+            value={stateMhs.keterangan}
+            placeholder="Tulis keterangan"
+          ></Textarea>
         </InputGroup>
         <VStack align={"end"}>
-        <HStack align={"end"}>
-        <Button
-          mt={4}
-          colorScheme={"green"}
-          isLoading={loading}
-        onClick={onOpen}
-        >
-          Kirim
-        </Button>
-        <Modal
-       isOpen={isOpen}
-       onClose={onClose}
-         >
-        <ModalOverlay />
-       <ModalContent>
-        <ModalHeader>Kirim Keterangan dan Status Bimbingan?</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={() => onSubmit(stateMhs.id)}>
-            Kirim
-          </Button>
-          <Button onClick={onClose}>Batal</Button>
-        </ModalFooter>
-       </ModalContent>
-       </Modal>
-        <Button
-          mt={4}
-          marginLeft={4}
-          colorScheme={"green"}
-          isLoading={loading}
-        onClick={() => router.back()}
-        >
-          Kembali
-        </Button>
-        </HStack>
+          <HStack align={"end"}>
+            <Button
+              mt={4}
+              colorScheme={"green"}
+              isLoading={loading}
+              onClick={onOpen}
+            >
+              Kirim
+            </Button>
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>
+                  Kirim Keterangan dan Status Bimbingan?
+                </ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}></ModalBody>
+                <ModalFooter>
+                  <Button
+                    colorScheme="blue"
+                    mr={3}
+                    onClick={() => onSubmit(stateMhs.id)}
+                  >
+                    Kirim
+                  </Button>
+                  <Button onClick={onClose}>Batal</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+            <Button
+              mt={4}
+              marginLeft={4}
+              colorScheme={"green"}
+              isLoading={loading}
+              onClick={() => router.back()}
+            >
+              Kembali
+            </Button>
+          </HStack>
         </VStack>
-
-    </Container>
-   
-    
+      </Container>
     </SimpleGrid>
   );
 };

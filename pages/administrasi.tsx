@@ -1,107 +1,46 @@
-import type { NextPage } from 'next'
-import { 
+import type { NextPage } from "next";
+import {
   useToast,
-  SimpleGrid, 
   Table,
   Th,
   Thead,
-  Tr, 
+  Tr,
   Tbody,
-  Td, 
+  Td,
   IconButton,
   Button,
   HStack,
 } from "@chakra-ui/react";
 import { FiDownload, FiTrash2, FiPlus } from "react-icons/fi";
-
 import React, { useState, useEffect } from "react";
-import { db, FirebaseApp } from "../config/firebase";
-
+import { db } from "../config/firebase";
 import router from "next/router";
 
 const Administrasi: NextPage = () => {
   const toast = useToast();
-  const [selectedFile, setSelectedFile] = useState<any>(undefined);
-  const [preview, setPreview] = useState<any>(
-    "https://via.placeholder.com/150"
-  );
-  const [loading, setLoading] = useState(false);
   const [state, setState] = useState<any[]>([]);
-  const idNow =  Date.now().toString();
   const [stateb, setStateb] = useState({
     id: "",
     fileName: "",
-    fileUrl:"",
+    fileUrl: "",
     created_at: Date.now().toString(),
     updated_at: Date.now().toString(),
   });
 
   useEffect(() => {
     async function fetch() {
-      db.collection(`administrasi`).orderBy("created_at", "desc" ).onSnapshot((v) => {
-        const data: any[]= []
-        v.forEach((vv) => {
-          data.push({...vv.data()})
-        })
-        setState(data)
-      })
+      db.collection(`administrasi`)
+        .orderBy("created_at", "desc")
+        .onSnapshot((v) => {
+          const data: any[] = [];
+          v.forEach((vv) => {
+            data.push({ ...vv.data() });
+          });
+          setState(data);
+        });
     }
     fetch();
   }, []);
-
-
-  const onSelectFile = (e: (EventTarget & HTMLInputElement) | null) => {
-    if (!e?.files) return;
-    if (e.files[0]) {
-      setSelectedFile(e.files[0]);
-      let readerFile = new FileReader();
-      console.log(readerFile)
-      readerFile.addEventListener("load", () => {
-        setPreview(readerFile.result);
-      });
-      readerFile.readAsDataURL(e.files[0]);
-    }
-  };
-
-  const onSubmitBerkas = async () => {
-    setLoading(true);
-   if(stateb.fileName !="" && preview != ""){
-    const metadata = {
-      contentType: "application/docx",
-    };
-    const snapshot = await FirebaseApp.storage()
-      .ref()
-      .child(
-        `/file/administrasi/${Date.now().toString()}-administrasi.docx`
-      )
-      .put(selectedFile, metadata);
-      const fileUrl = await snapshot.ref.getDownloadURL();
-      if(fileUrl != ""){
-      setStateb({...stateb, fileUrl: fileUrl, created_at: idNow, id: idNow })
-      await db
-      .doc(`administrasi/${stateb.id}`)
-      .get()
-      .then((docs) => {
-        if (docs.exists) {
-          toast({
-            description: "file telah terdaftar",
-            status: "error",
-          });
-          setLoading(false);
-          return;
-        } else {
-          db.doc(`administrasi/${stateb.id}`).set(stateb);
-          toast({
-            description: "Tambah Data Sukses",
-            status: "success",
-          });
-          setLoading(false);
-        }
-      });
-     
-    }
-   }
-  };
 
   const onDelete = async (id: string) => {
     await db
@@ -127,12 +66,12 @@ const Administrasi: NextPage = () => {
         mt={4}
         leftIcon={<FiPlus />}
         colorScheme={"green"}
-        onClick={()=>router.push(`/tambah/administrasi`)}
+        onClick={() => router.push(`/tambah/administrasi`)}
       >
-         File
-     </Button>
-    
-    <Table variant="striped" size={"sm"} mt={5}>
+        File
+      </Button>
+
+      <Table variant="striped" size={"sm"} mt={5}>
         <Thead>
           <Tr>
             <Th>No.</Th>
@@ -147,11 +86,12 @@ const Administrasi: NextPage = () => {
               <Td>{it.fileName}</Td>
               <Td>
                 <HStack>
-                <a target="_blank" href={it.fileUrl} rel="noopener noreferrer"> 
-                  <IconButton
-                    aria-label="icon"
-                    icon={<FiDownload />}
-                  />
+                  <a
+                    target="_blank"
+                    href={it.fileUrl}
+                    rel="noopener noreferrer"
+                  >
+                    <IconButton aria-label="icon" icon={<FiDownload />} />
                   </a>
                   <IconButton
                     aria-label="icon"
@@ -165,7 +105,7 @@ const Administrasi: NextPage = () => {
         </Tbody>
       </Table>
     </div>
-  )
-}
+  );
+};
 
-export default Administrasi
+export default Administrasi;

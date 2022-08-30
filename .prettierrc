@@ -1,0 +1,18 @@
+{
+    "endOfLine": "lf",
+    "tabSize": 2,
+    "tabWidth": 2,
+    "insertSpaces": true,
+    "trimAutoWhitespace": true,
+    "autoClosingBrackets": true,
+    "autoClosingQuotes": true,
+    "autoSurround": true,
+    "autoIndent": true,
+    "formatOnType": true,
+    "formatOnPaste": true,
+    "dragAndDrop": true,
+    "useTabStops": true,
+    "wordWrap": "off",
+    "renderControlCharacters": false,
+    "trailingComma": "es5"
+}

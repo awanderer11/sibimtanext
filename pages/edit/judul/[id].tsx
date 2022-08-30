@@ -49,7 +49,6 @@ const EditMahasiswa = () => {
 
   return (
     <Container maxW={"container.xl"}>
-     
       <InputWihtText
         title="Tahun"
         value={state.tahun}

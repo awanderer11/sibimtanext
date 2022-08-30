@@ -1,5 +1,6 @@
-import { Container, 
-  Button, 
+import {
+  Container,
+  Button,
   useToast,
   useDisclosure,
   Modal,
@@ -9,13 +10,12 @@ import { Container,
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Box
- } from "@chakra-ui/react";
+  Box,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { InputWihtText } from "../../component/InputText";
 import { db } from "../../config/firebase";
 import router from "next/router";
-
 
 const Dosen = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -30,7 +30,7 @@ const Dosen = () => {
     password: "",
     isLogin: false,
     roles: "dosen",
-    img_url:"",
+    img_url: "",
     created_at: Date.now().toString(),
     updated_at: Date.now().toString(),
   });
@@ -59,7 +59,7 @@ const Dosen = () => {
             return;
           }
         });
-        router.push(`/datadosen`)
+      router.push(`/datadosen`);
     } catch (error: any) {
       setLoading(false);
       toast({
@@ -104,7 +104,6 @@ const Dosen = () => {
           setState((prev) => ({ ...prev, password: e.target.value }))
         }
       />
-      
       <Button
         colorScheme={"green"}
         color={"white"}
@@ -115,26 +114,21 @@ const Dosen = () => {
         Tambah
       </Button>
       <Box>
-      <Modal
-       isOpen={isOpen}
-       onClose={onClose}
-         >
-        <ModalOverlay />
-       <ModalContent>
-        <ModalHeader>Tambah dosen?</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={onSubmit}>
-            Simpan
-          </Button>
-          <Button onClick={onClose}>Batal</Button>
-        </ModalFooter>
-       </ModalContent>
-       </Modal>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Tambah dosen?</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}></ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onSubmit}>
+                Ok
+              </Button>
+              <Button onClick={onClose}>Batal</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
-     
     </Container>
   );
 };

@@ -1,15 +1,7 @@
-
-import type { NextPage } from 'next'
-
+import type { NextPage } from "next";
 
 const Home: NextPage = () => {
-  
-  return (
-    <div>
-      SELAMAT DATANG DI SIBIMTA
-    </div>
-  )
-  
-}
+  return <div>SELAMAT DATANG DI SIBIMTA</div>;
+};
 
-export default Home
+export default Home;

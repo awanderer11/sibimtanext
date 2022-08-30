@@ -8,7 +8,7 @@ import {
   Thead,
   Tr,
   useToast,
-  IconButton
+  IconButton,
 } from "@chakra-ui/react";
 import React, { useEffect, useState } from "react";
 import { db, auth } from "../config/firebase";
@@ -20,7 +20,7 @@ const Hasil = () => {
   const toast = useToast();
   useEffect(() => {
     async function fetch() {
-      if(auth.currentUser?.email ==="sibimta@email.com"){
+      if (auth.currentUser?.email === "sibimta@email.com") {
         db.collection("data-mahasiswa").onSnapshot((docs) => {
           const data: any[] = [];
           docs.forEach((it) => {
@@ -30,36 +30,40 @@ const Hasil = () => {
           });
           setState(data);
         });
-      }
-      else{
+      } else {
         const data1: any[] = [];
         const data2: any[] = [];
-        db.collection("data-dosen").where("email", "==", auth.currentUser?.email).get().then((d)=>{
-          let nips  = ''
-          let isLogin = false
+        db.collection("data-dosen")
+          .where("email", "==", auth.currentUser?.email)
+          .get()
+          .then((d) => {
+            let nips = "";
+            let isLogin = false;
             d.forEach((d) => {
-           isLogin = d.data().isLogin
-           nips = d.data().nip
-            })
-            db.collection("data-mahasiswa").where("nip1", "==", nips).onSnapshot((docs) => {
-              docs.forEach((it) => {
-                data1.push({
-                  ...it.data(),
+              isLogin = d.data().isLogin;
+              nips = d.data().nip;
+            });
+            db.collection("data-mahasiswa")
+              .where("nip1", "==", nips)
+              .onSnapshot((docs) => {
+                docs.forEach((it) => {
+                  data1.push({
+                    ...it.data(),
+                  });
                 });
               });
-            });
-            db.collection("data-mahasiswa").where("nip2", "==", nips).onSnapshot((docs) => {
-              docs.forEach((it) => {
-                data2.push({
-                  ...it.data(),
+            db.collection("data-mahasiswa")
+              .where("nip2", "==", nips)
+              .onSnapshot((docs) => {
+                docs.forEach((it) => {
+                  data2.push({
+                    ...it.data(),
+                  });
                 });
+                let data = data1.concat(data2);
+                setState(data);
               });
-              let data = data1.concat(data2);
-              setState(data);
-            });
-        })
-        
-        
+          });
       }
     }
     fetch();
@@ -90,12 +94,14 @@ const Hasil = () => {
               <Td>{it.pembimbing1.nama}</Td>
               <Td>{it.pembimbing2.nama}</Td>
               <Td>{it.hasil}</Td>
-              <Td><IconButton
-                    aria-label="icon"
-                    icon={<FiLogIn />}
-                    onClick={() => router.push(`/dosen/hasil/${it.nim}`)}
-                    disabled={!it.sempro}
-                  /></Td>
+              <Td>
+                <IconButton
+                  aria-label="icon"
+                  icon={<FiLogIn />}
+                  onClick={() => router.push(`/dosen/hasil/${it.nim}`)}
+                  disabled={!it.sempro}
+                />
+              </Td>
             </Tr>
           ))}
         </Tbody>

@@ -1,12 +1,13 @@
-import { Container, 
-  Button, 
-  useToast, 
-  InputGroup, 
-  InputLeftAddon, 
-  Input, 
-  SimpleGrid, 
+import {
+  Container,
+  Button,
+  useToast,
+  InputGroup,
+  InputLeftAddon,
+  Input,
+  SimpleGrid,
   VStack,
-  Modal, 
+  Modal,
   ModalOverlay,
   ModalHeader,
   ModalBody,
@@ -34,7 +35,7 @@ const MyProfile = () => {
     nama: "",
     kontak: "",
     email: "",
-    img_url:"",
+    img_url: "",
     updated_at: Date.now().toString(),
   });
   useEffect(() => {
@@ -57,135 +58,146 @@ const MyProfile = () => {
       setSelectedFile(e.files[0]);
       const reader = new FileReader();
       reader.addEventListener("load", () => {
-        state.img_url="";
+        state.img_url = "";
         setPreview(reader.result);
       });
       reader.readAsDataURL(e.files[0]);
     }
   };
 
-const onSubmit = async (nip: string) => {
+  const onSubmit = async (nip: string) => {
     setLoading(true);
 
-    if(preview === "https://via.placeholder.com/150"){
+    if (preview === "https://via.placeholder.com/150") {
       await db
-      .doc(`data-dosen/${nip}`)
-      .update({...state, img_url: state.img_url,})
-      .then(() => {
-        toast({
-          description: "Update Data Berhasil",
-          status: "success",
+        .doc(`data-dosen/${nip}`)
+        .update({ ...state, img_url: state.img_url })
+        .then(() => {
+          toast({
+            description: "Update Data Berhasil",
+            status: "success",
+          });
+          setLoading(false);
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setLoading(false);
+      setLoading(false);
+    } else {
+      const metadata = {
+        contentType: "image/jpeg",
+      };
+
+      const snapshot = await FirebaseApp.storage()
+        .ref()
+        .child(
+          `/images/${new Date().toISOString().substring(0, 10)}-${state.nip}`
+        )
+        .put(selectedFile, metadata);
+
+      const imageUrl = await snapshot.ref.getDownloadURL();
+
+      await db
+        .doc(`data-dosen/${nip}`)
+        .update({ ...state, img_url: imageUrl })
+        .then(() => {
+          toast({
+            description: "Update Foto Berhasil",
+            status: "success",
+          });
+          setLoading(false);
+        })
+        .catch((e) => {
+          console.log(e);
+        });
+      setLoading(false);
     }
-   else{
-    const metadata = {
-      contentType: "image/jpeg",
-    };
-
-    const snapshot = await FirebaseApp.storage()
-      .ref()
-      .child(
-        `/images/${new Date().toISOString().substring(0, 10)}-${
-          state.nip
-        }`
-      )
-      .put(selectedFile, metadata);
-
-     const imageUrl = await snapshot.ref.getDownloadURL();
-
-    await db
-      .doc(`data-dosen/${nip}`)
-      .update({...state, img_url: imageUrl,})
-      .then(() => {
-        toast({
-          description: "Update Foto Berhasil",
-          status: "success",
-        });
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setLoading(false);
-   }
   };
-
 
   return (
     <SimpleGrid columns={2} spacing={10}>
-    <Container maxW={"container.xl"}>
-      <ImagePick
-          imageUrl={state.img_url == "" ? preview : state.img_url }
+      <Container maxW={"container.xl"}>
+        <ImagePick
+          imageUrl={state.img_url == "" ? preview : state.img_url}
           onChange={(e) => onSelectFile(e.target)}
         />
-      <InputGroup mt={2}>
-        <InputLeftAddon children='NIP' />
-        <Input type='tel' placeholder='' disabled value={state.nip} 
-        onChange={(e) => setState((prev) => ({ ...prev, nip: e.target.value }))}
-        />
+        <InputGroup mt={2}>
+          <InputLeftAddon children="NIP" />
+          <Input
+            type="tel"
+            placeholder=""
+            disabled
+            value={state.nip}
+            onChange={(e) =>
+              setState((prev) => ({ ...prev, nip: e.target.value }))
+            }
+          />
         </InputGroup>
         <InputGroup mt={2}>
-        <InputLeftAddon children='Nama' />
-        <Input type='tel' placeholder=''  value={state.nama} 
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, nama: e.target.value }))
-        }
-        />
+          <InputLeftAddon children="Nama" />
+          <Input
+            type="tel"
+            placeholder=""
+            value={state.nama}
+            onChange={(e) =>
+              setState((prev) => ({ ...prev, nama: e.target.value }))
+            }
+          />
         </InputGroup>
         <InputGroup mt={2}>
-        <InputLeftAddon children='Kontak' />
-        <Input type='tel' placeholder=''  value={state.kontak} 
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, kontak: e.target.value }))
-        }
-        />
+          <InputLeftAddon children="Kontak" />
+          <Input
+            type="tel"
+            placeholder=""
+            value={state.kontak}
+            onChange={(e) =>
+              setState((prev) => ({ ...prev, kontak: e.target.value }))
+            }
+          />
         </InputGroup>
         <InputGroup mt={2}>
-        <InputLeftAddon children='Email' />
-        <Input type='tel' placeholder='' disabled  value={state.email} 
-        onChange={(e) =>
-          setState((prev) => ({ ...prev, email: e.target.value }))
-        }
-        />
+          <InputLeftAddon children="Email" />
+          <Input
+            type="tel"
+            placeholder=""
+            disabled
+            value={state.email}
+            onChange={(e) =>
+              setState((prev) => ({ ...prev, email: e.target.value }))
+            }
+          />
         </InputGroup>
-      <VStack align={"end"}>    
-      <Button
-        colorScheme={"green"}
-        color={"white"}
-        mt={10}
-        onClick={onOpen}
-        isLoading={loading}
-      >
-        Simpan
-      </Button>
-      </VStack>
-      <Modal
-      isOpen={isOpen}
-      onClose={onClose}
-       >
-      <ModalOverlay />
-      <ModalContent>
-        <ModalHeader>Yakin Ingin Menyimpan Perubahan?</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-          
-        </ModalBody>
-
-        <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={() => onSubmit(state.nip)}>
+        <VStack align={"end"}>
+          <Button
+            colorScheme={"green"}
+            color={"white"}
+            mt={10}
+            onClick={onOpen}
+            isLoading={loading}
+          >
             Simpan
           </Button>
-          <Button onClick={onClose}>Batal</Button>
-        </ModalFooter>
-      </ModalContent>
-    </Modal>
-    </Container>
+        </VStack>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Yakin Ingin Menyimpan Perubahan?</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}></ModalBody>
+
+            <ModalFooter>
+              <Button
+                colorScheme="blue"
+                mr={3}
+                onClick={() => onSubmit(state.nip)}
+              >
+                Ok
+              </Button>
+              <Button onClick={onClose}>Batal</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
+      </Container>
     </SimpleGrid>
   );
 };

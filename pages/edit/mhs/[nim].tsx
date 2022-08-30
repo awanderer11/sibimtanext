@@ -55,7 +55,7 @@ const EditMahasiswa = () => {
 
   return (
     <Container maxW={"container.xl"}>
-     <InputWihtText
+      <InputWihtText
         title="NIM"
         value={state.nim}
         onChange={(e) => setState((prev) => ({ ...prev, nim: e.target.value }))}

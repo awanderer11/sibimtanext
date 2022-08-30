@@ -77,7 +77,7 @@ const JudulSkripsi = () => {
         <Tbody>
           {state.map((it, id) => (
             <Tr key={id}>
-              <Td>{id + 1 }</Td>
+              <Td>{id + 1}</Td>
               <Td>{it.tahun}</Td>
               <Td>{it.judul}</Td>
               <Td>

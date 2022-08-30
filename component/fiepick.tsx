@@ -5,20 +5,16 @@ interface ImagePicProps {
   onChange?: React.ChangeEventHandler<HTMLInputElement> | undefined;
 }
 
-const FilePick: FC<ImagePicProps> = ({
-  onChange,
-}: ImagePicProps) => {
+const FilePick: FC<ImagePicProps> = ({ onChange }: ImagePicProps) => {
   return (
     <Box mt={2}>
       <input
         type="file"
         accept="docx/*"
         id={"file"}
-        // style={{ display: "none" }}
         multiple={true}
         onChange={onChange}
       />
-      
     </Box>
   );
 };

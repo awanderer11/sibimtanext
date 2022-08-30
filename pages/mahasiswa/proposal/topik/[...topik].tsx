@@ -1,18 +1,17 @@
-import { 
-    Container, 
-    useToast,
-    Box, 
-    InputGroup, 
-    Input,
-    InputLeftAddon, 
-    SimpleGrid, 
-    Select,
-    Text,
-    Button,
-    Textarea,
-    VStack,
-    HStack,
-    Modal, 
+import {
+  Container,
+  useToast,
+  InputGroup,
+  Input,
+  InputLeftAddon,
+  SimpleGrid,
+  Select,
+  Text,
+  Button,
+  Textarea,
+  VStack,
+  HStack,
+  Modal,
   ModalOverlay,
   ModalHeader,
   ModalBody,
@@ -20,9 +19,9 @@ import {
   ModalFooter,
   ModalCloseButton,
   useDisclosure,
- } from "@chakra-ui/react";
- import FilePick from "../../../../component/fiepick";
- import ImagePick from "../../../../component/imagepick";
+} from "@chakra-ui/react";
+import FilePick from "../../../../component/fiepick";
+import ImagePick from "../../../../component/imagepick";
 import React, { useState, useEffect } from "react";
 import { db, FirebaseApp } from "../../../../config/firebase";
 import router from "next/router";
@@ -38,22 +37,22 @@ const Proposal = () => {
   const [preview, setPreview] = useState<any>(
     "https://via.placeholder.com/150"
   );
-  const topik = router.query.topik || []
+  const topik = router.query.topik || [];
   const [loading, setLoading] = useState(false);
   const [stateMhs, setStateMhs] = useState({
-    id:"",
-    fileUrl:"",
-    imgUrl:"",
-    keterangan:"",
-    tglBimbingan:"",
-    review:"",
-    status:"",
-    topikBahasan:"",
+    id: "",
+    fileUrl: "",
+    imgUrl: "",
+    keterangan: "",
+    tglBimbingan: "",
+    review: "",
+    status: "",
+    topikBahasan: "",
   });
   const [state, setState] = useState({
     nim: "",
     nama: "",
-    judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
+    judul: { judul: "", created_at: "", updated_at: "", url: "" },
     tanggallahir: "",
     tahunmasuk: "",
     email: "",
@@ -61,8 +60,11 @@ const Proposal = () => {
     alamat: "",
     jeniskelamin: "",
     agama: "",
-    img_url:"",
-    prpsl:{bab1:{tglBimbingan:"", status:"", keterangan:""}, bab2:{tglBimbingan:"", status:"", keterangan:""}},
+    img_url: "",
+    prpsl: {
+      bab1: { tglBimbingan: "", status: "", keterangan: "" },
+      bab2: { tglBimbingan: "", status: "", keterangan: "" },
+    },
     updated_at: new Date().toISOString().substring(0, 10),
   });
 
@@ -84,7 +86,9 @@ const Proposal = () => {
   useEffect(() => {
     async function fetch() {
       await db
-        .doc(`data-mahasiswa/${topik[0]}`).collection("proposal").doc(`${topik[1]}`)
+        .doc(`data-mahasiswa/${topik[0]}`)
+        .collection("proposal")
+        .doc(`${topik[1]}`)
         .get()
         .then((docs) => {
           setStateMhs({ ...(docs.data() as any) });
@@ -101,7 +105,7 @@ const Proposal = () => {
     if (e.files[0]) {
       setSelectedFile(e.files[0]);
       let readerFile = new FileReader();
-      console.log(readerFile)
+      console.log(readerFile);
       readerFile.addEventListener("load", () => {
         setPreview(readerFile.result);
       });
@@ -114,23 +118,23 @@ const Proposal = () => {
     if (ee.files[0]) {
       setSelectedImage(ee.files[0]);
       let readerImage = new FileReader();
-      console.log(readerImage)
+      console.log(readerImage);
       readerImage.addEventListener("load", () => {
-        stateMhs.imgUrl="";
+        stateMhs.imgUrl = "";
         setPreviewImage(readerImage.result);
       });
       readerImage.readAsDataURL(ee.files[0]);
     }
   };
-  
+
   const onSubmitBerkas = async (id: string) => {
     setLoading(true);
     const metadata = {
       contentType: "application/docx",
     };
     const metadataImage = {
-        contentType: "image/jpeg",
-      };
+      contentType: "image/jpeg",
+    };
 
     const snapshot = await FirebaseApp.storage()
       .ref()
@@ -150,12 +154,12 @@ const Proposal = () => {
       )
       .put(selectedImage, metadataImage);
 
-     const fileUrl = await snapshot.ref.getDownloadURL();
-     const imageUrl = await snapshotImage.ref.getDownloadURL();
+    const fileUrl = await snapshot.ref.getDownloadURL();
+    const imageUrl = await snapshotImage.ref.getDownloadURL();
 
     await db
       .doc(`data-mahasiswa/${topik[0]}/proposal/${id}`)
-      .update({...stateMhs, fileUrl: fileUrl, imgUrl: imageUrl })
+      .update({ ...stateMhs, fileUrl: fileUrl, imgUrl: imageUrl })
       .then(() => {
         toast({
           description: "Unggah Berkas Berhasil",
@@ -167,110 +171,108 @@ const Proposal = () => {
       .catch((e) => {
         console.log(e);
       });
-      onClose();
+    onClose();
     setLoading(false);
   };
 
-  if(!stateMhs){
-    return <p>...Loading</p>
+  if (!stateMhs) {
+    return <p>...Loading</p>;
   }
 
   return (
     <SimpleGrid columns={2} spacing={10}>
-    <Container maxW={"container.xl"}>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='NIM' />
-        <Input type='tel' placeholder=''  value={state.nim} 
-        />
+      <Container maxW={"container.xl"}>
+        <InputGroup mt={2}>
+          <InputLeftAddon children="NIM" />
+          <Input type="tel" placeholder="" value={state.nim} />
         </InputGroup>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Nama' />
-        <Input type='tel' placeholder=''   value={state.nama} 
-        />
+        <InputGroup mt={2}>
+          <InputLeftAddon children="Nama" />
+          <Input type="tel" placeholder="" value={state.nama} />
         </InputGroup>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Judul' />
-        <Input type='tel' placeholder=''   value={state.judul.judul} 
-        />
+        <InputGroup mt={2}>
+          <InputLeftAddon children="Judul" />
+          <Input type="tel" placeholder="" value={state.judul.judul} />
         </InputGroup>
         <>
-        <InputGroup mt={2}>
-        <InputLeftAddon children='Tanggal Bimbingan' />
-        <Input type='tel' placeholder=''   value={stateMhs.tglBimbingan} 
-        />
-        </InputGroup>
-        <InputGroup mt={2}>
-        <InputLeftAddon children='Topik Bahasan' />
-        <Input type='tel' placeholder=''   value={stateMhs.topikBahasan} 
-        />
-        </InputGroup>
-        
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Status Bimbingan' />
-        <Select value={stateMhs.status}  placeholder='' >
-        <option value='Belum Direview'>Belum Direview</option>
-        <option value='Revisi'>Revisi</option>
-       <option value='ACC'> ACC</option>
-        </Select>
-        </InputGroup>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Keterangan' />
-        <Textarea onChange={(e) => setStateMhs((prev) => ({ ...prev, keterangan: e.target.value }))} value={stateMhs.keterangan} placeholder='Tulis keterangan'></Textarea>
-        </InputGroup>
-        
-      </>
-        
-    </Container>
-    <Container>
-      <Text >Unggah Berkas</Text>
-        <FilePick
-          onChange={(e) => onSelectFile(e.target)}
-        />
-        <Text mt={4} >Unggah Media</Text>
+          <InputGroup mt={2}>
+            <InputLeftAddon children="Tanggal Bimbingan" />
+            <Input type="tel" placeholder="" value={stateMhs.tglBimbingan} />
+          </InputGroup>
+          <InputGroup mt={2}>
+            <InputLeftAddon children="Topik Bahasan" />
+            <Input type="tel" placeholder="" value={stateMhs.topikBahasan} />
+          </InputGroup>
+
+          <InputGroup mt={2}>
+            <InputLeftAddon children="Status Bimbingan" />
+            <Select value={stateMhs.status} placeholder="">
+              <option value="Belum Direview">Belum Direview</option>
+              <option value="Revisi">Revisi</option>
+              <option value="ACC"> ACC</option>
+            </Select>
+          </InputGroup>
+          <InputGroup mt={2}>
+            <InputLeftAddon children="Keterangan" />
+            <Textarea
+              onChange={(e) =>
+                setStateMhs((prev) => ({ ...prev, keterangan: e.target.value }))
+              }
+              value={stateMhs.keterangan}
+              placeholder="Tulis keterangan"
+            ></Textarea>
+          </InputGroup>
+        </>
+      </Container>
+      <Container>
+        <Text>Unggah Berkas</Text>
+        <FilePick onChange={(e) => onSelectFile(e.target)} />
+        <Text mt={4}>Unggah Media</Text>
         <ImagePick
-          imageUrl={stateMhs.imgUrl == "" ? previewImage : stateMhs.imgUrl }
-          onChange={(ee) => {onSelectImage(ee.target)}}
+          imageUrl={stateMhs.imgUrl == "" ? previewImage : stateMhs.imgUrl}
+          onChange={(ee) => {
+            onSelectImage(ee.target);
+          }}
         />
         <VStack align={"end"}>
-        <HStack align={"end"}>
-        <Button
-          mt={4}
-          colorScheme={"green"}
-          isLoading={loading}
-        onClick={onOpen}
-        >
-          Kirim
-        </Button>
-        <Modal
-       isOpen={isOpen}
-       onClose={onClose}
-         >
-        <ModalOverlay />
-       <ModalContent>
-        <ModalHeader>Unggah Berkas?</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={() => onSubmitBerkas(stateMhs.id)}>
-            Simpan
-          </Button>
-          <Button onClick={onClose}>Batal</Button>
-        </ModalFooter>
-       </ModalContent>
-       </Modal>
-        <Button
-          mt={4}
-          colorScheme={"green"}
-          isLoading={loading}
-        onClick={() => router.back()}
-        >
-          Kembali
-        </Button>
-        </HStack>
+          <HStack align={"end"}>
+            <Button
+              mt={4}
+              colorScheme={"green"}
+              isLoading={loading}
+              onClick={onOpen}
+            >
+              Kirim
+            </Button>
+            <Modal isOpen={isOpen} onClose={onClose}>
+              <ModalOverlay />
+              <ModalContent>
+                <ModalHeader>Unggah Berkas?</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody pb={6}></ModalBody>
+                <ModalFooter>
+                  <Button
+                    colorScheme="blue"
+                    mr={3}
+                    onClick={() => onSubmitBerkas(stateMhs.id)}
+                  >
+                    Ok
+                  </Button>
+                  <Button onClick={onClose}>Batal</Button>
+                </ModalFooter>
+              </ModalContent>
+            </Modal>
+            <Button
+              mt={4}
+              colorScheme={"green"}
+              isLoading={loading}
+              onClick={() => router.back()}
+            >
+              Kembali
+            </Button>
+          </HStack>
         </VStack>
-        
-    </Container>
+      </Container>
     </SimpleGrid>
   );
 };

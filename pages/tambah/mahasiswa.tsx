@@ -1,16 +1,18 @@
-import { Container,
-   Button, 
-   useToast, 
-   Select,
-   useDisclosure,
-   Modal,
-   ModalOverlay,
-   ModalHeader,
-   ModalContent,
-   ModalCloseButton,
-   ModalBody,
-   ModalFooter,
-   Box, } from "@chakra-ui/react";
+import {
+  Container,
+  Button,
+  useToast,
+  Select,
+  useDisclosure,
+  Modal,
+  ModalOverlay,
+  ModalHeader,
+  ModalContent,
+  ModalCloseButton,
+  ModalBody,
+  ModalFooter,
+  Box,
+} from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { InputWihtText } from "../../component/InputText";
 import { db, auth } from "../../config/firebase";
@@ -32,11 +34,11 @@ const Mahasiswa = () => {
     agama: "",
     email: "",
     password: "",
-    judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
-    pembimbing1: {"nip":"","nama": ""},
-    pembimbing2: {"nip":"","nama": ""},
-    nip1:"",
-    nip2:"",
+    judul: { judul: "", created_at: "", updated_at: "", url: "" },
+    pembimbing1: { nip: "", nama: "" },
+    pembimbing2: { nip: "", nama: "" },
+    nip1: "",
+    nip2: "",
     proposal: "",
     hasil: "",
     tutup: "",
@@ -45,7 +47,7 @@ const Mahasiswa = () => {
     semtutup: false,
     yudisium: false,
     isLogin: false,
-    img_url:"",
+    img_url: "",
     roles: "mahasiswa",
     created_at: Date.now().toString(),
     updated_at: Date.now().toString(),
@@ -53,20 +55,20 @@ const Mahasiswa = () => {
 
   useEffect(() => {
     async function fetch() {
-      db.collection('data-dosen').onSnapshot((v) => {
-        const data: any[]= []
+      db.collection("data-dosen").onSnapshot((v) => {
+        const data: any[] = [];
         v.forEach((vv) => {
-          data.push({...vv.data()})
-        })
-        setDosen(data)
-      })
+          data.push({ ...vv.data() });
+        });
+        setDosen(data);
+      });
     }
     fetch();
   }, []);
 
   const onSubmit = async () => {
     setLoading(true);
-    console.log(state)
+    console.log(state);
     try {
       await db
         .doc(`data-mahasiswa/${state.nim}`)
@@ -89,7 +91,7 @@ const Mahasiswa = () => {
             return;
           }
         });
-        router.push(`/datamahasiswa`)
+      router.push(`/datamahasiswa`);
     } catch (error: any) {
       setLoading(false);
       toast({
@@ -101,12 +103,16 @@ const Mahasiswa = () => {
   };
 
   const onChangeValue = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    if(e.target.value !== "Pilih Pembimbing 1"){
-      const parseJosn = JSON.parse(e.target.value)
-       setState((prev) => ({ ...prev, pembimbing1: { nip: parseJosn.nip, nama: parseJosn.nama }, nip1: parseJosn.nip }));
+    if (e.target.value !== "Pilih Pembimbing 1") {
+      const parseJosn = JSON.parse(e.target.value);
+      setState((prev) => ({
+        ...prev,
+        pembimbing1: { nip: parseJosn.nip, nama: parseJosn.nama },
+        nip1: parseJosn.nip,
+      }));
     }
     return;
-  }
+  };
 
   return (
     <Container maxW={"container.xl"}>
@@ -129,8 +135,22 @@ const Mahasiswa = () => {
           setState((prev) => ({ ...prev, tahunmasuk: e.target.value }))
         }
       />
-      <Select mt="4" align={"start"} width={"400px"} onChange={(e) => onChangeValue(e)} placeholder='Pilih Pembimbing 1' >
-        {dosen.map((it,id)=> <option key={id} defaultValue={JSON.stringify(it)} value={JSON.stringify(it)}>{it.nip +" "+it.nama}</option>)}
+      <Select
+        mt="4"
+        align={"start"}
+        width={"400px"}
+        onChange={(e) => onChangeValue(e)}
+        placeholder="Pilih Pembimbing 1"
+      >
+        {dosen.map((it, id) => (
+          <option
+            key={id}
+            defaultValue={JSON.stringify(it)}
+            value={JSON.stringify(it)}
+          >
+            {it.nip + " " + it.nama}
+          </option>
+        ))}
       </Select>
       <InputWihtText
         title="Email"
@@ -156,24 +176,20 @@ const Mahasiswa = () => {
         Tambah
       </Button>
       <Box>
-      <Modal
-       isOpen={isOpen}
-       onClose={onClose}
-         >
-        <ModalOverlay />
-       <ModalContent>
-        <ModalHeader>Tambah mahasiswa?</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={onSubmit}>
-            Simpan
-          </Button>
-          <Button onClick={onClose}>Batal</Button>
-        </ModalFooter>
-       </ModalContent>
-       </Modal>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Tambah mahasiswa?</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}></ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onSubmit}>
+                Ok
+              </Button>
+              <Button onClick={onClose}>Batal</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
     </Container>
   );

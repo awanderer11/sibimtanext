@@ -1,7 +1,8 @@
-import { Container, 
-  Button, 
+import {
+  Container,
+  Button,
   useToast,
-  useDisclosure, 
+  useDisclosure,
   Modal,
   ModalOverlay,
   ModalHeader,
@@ -9,7 +10,8 @@ import { Container,
   ModalCloseButton,
   ModalBody,
   ModalFooter,
-  Box,} from "@chakra-ui/react";
+  Box,
+} from "@chakra-ui/react";
 import React, { useState } from "react";
 import { InputWihtText } from "../../component/InputText";
 import { db } from "../../config/firebase";
@@ -29,37 +31,36 @@ const Judul = () => {
 
   const onSubmit = async () => {
     setLoading(true);
-    console.log(state)
+    console.log(state);
     try {
-      if(state.judul === "" && state.tahun === ""){
+      if (state.judul === "" && state.tahun === "") {
         toast({
           description: "judul dan tahun tidak boleh kosong!",
           status: "error",
         });
-      }
-      else{
+      } else {
         await db
-        .doc(`judulskripsi/${state.id}`)
-        .get()
-        .then((docs) => {
-          if (docs.exists) {
-            toast({
-              description: "id telah terdaftar",
-              status: "error",
-            });
-            setLoading(false);
-            return;
-          } else {
-            db.doc(`judulskripsi/${state.id}`).set(state);
-            toast({
-              description: "Tambah Data Sukses",
-              status: "success",
-            });
-            setLoading(false);
-            return;
-          }
-        });
-        router.push(`/judulskripsi`)
+          .doc(`judulskripsi/${state.id}`)
+          .get()
+          .then((docs) => {
+            if (docs.exists) {
+              toast({
+                description: "id telah terdaftar",
+                status: "error",
+              });
+              setLoading(false);
+              return;
+            } else {
+              db.doc(`judulskripsi/${state.id}`).set(state);
+              toast({
+                description: "Tambah Data Sukses",
+                status: "success",
+              });
+              setLoading(false);
+              return;
+            }
+          });
+        router.push(`/judulskripsi`);
       }
     } catch (error: any) {
       setLoading(false);
@@ -71,13 +72,14 @@ const Judul = () => {
     setLoading(false);
   };
 
- 
   return (
     <Container maxW={"container.xl"}>
       <InputWihtText
         title="Tahun"
         value={state.tahun}
-        onChange={(e) => setState((prev) => ({ ...prev, tahun: e.target.value }))}
+        onChange={(e) =>
+          setState((prev) => ({ ...prev, tahun: e.target.value }))
+        }
       />
       <InputWihtText
         title="Judul"
@@ -96,24 +98,20 @@ const Judul = () => {
         Tambah
       </Button>
       <Box>
-      <Modal
-       isOpen={isOpen}
-       onClose={onClose}
-         >
-        <ModalOverlay />
-       <ModalContent>
-        <ModalHeader>Tambah judul skripsi?</ModalHeader>
-        <ModalCloseButton />
-        <ModalBody pb={6}>
-        </ModalBody>
-        <ModalFooter>
-          <Button colorScheme='blue' mr={3} onClick={onSubmit}>
-            Simpan
-          </Button>
-          <Button onClick={onClose}>Batal</Button>
-        </ModalFooter>
-       </ModalContent>
-       </Modal>
+        <Modal isOpen={isOpen} onClose={onClose}>
+          <ModalOverlay />
+          <ModalContent>
+            <ModalHeader>Tambah judul skripsi?</ModalHeader>
+            <ModalCloseButton />
+            <ModalBody pb={6}></ModalBody>
+            <ModalFooter>
+              <Button colorScheme="blue" mr={3} onClick={onSubmit}>
+                Ok
+              </Button>
+              <Button onClick={onClose}>Batal</Button>
+            </ModalFooter>
+          </ModalContent>
+        </Modal>
       </Box>
     </Container>
   );

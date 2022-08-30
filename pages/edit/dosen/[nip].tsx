@@ -49,7 +49,7 @@ const EditDosen = () => {
 
   return (
     <Container maxW={"container.xl"}>
-        <InputWihtText
+      <InputWihtText
         title="NIP"
         value={state.nip}
         onChange={(e) => setState((prev) => ({ ...prev, nip: e.target.value }))}

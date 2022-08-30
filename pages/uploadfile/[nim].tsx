@@ -1,7 +1,7 @@
-import { Container, 
-  Button, 
+import {
+  Container,
+  Button,
   useToast,
-  Text, 
   InputGroup,
   InputLeftAddon,
   Input,
@@ -9,13 +9,12 @@ import { Container,
   VStack,
   Box,
   HStack,
-  Textarea
- } from "@chakra-ui/react";
+  Textarea,
+} from "@chakra-ui/react";
 import React, { useState, useEffect } from "react";
 import { db, FirebaseApp } from "../../config/firebase";
 import router from "next/router";
 import FilePick from "../../component/fiepick";
-import { InputWihtText } from "../../component/InputText";
 
 const UploadFile = () => {
   const toast = useToast();
@@ -25,9 +24,9 @@ const UploadFile = () => {
   const [selectedFile, setSelectedFile] = useState<any>(undefined);
   const [loading, setLoading] = useState(false);
   const [state, setState] = useState({
-    nama:"",
-    nim:"",
-    judul:{"judul":"", "created_at":"", "updated_at":"", "url":""},
+    nama: "",
+    nim: "",
+    judul: { judul: "", created_at: "", updated_at: "", url: "" },
   });
   useEffect(() => {
     async function fetch() {
@@ -56,7 +55,7 @@ const UploadFile = () => {
     }
   };
 
-const onSubmit = async (nim: string) => {
+  const onSubmit = async (nim: string) => {
     setLoading(true);
     const metadata = {
       contentType: "application/docx",
@@ -65,98 +64,119 @@ const onSubmit = async (nim: string) => {
     const snapshot = await FirebaseApp.storage()
       .ref()
       .child(
-        `/file/${new Date().toISOString().substring(0, 7)}-${
-          state.nim
-        }.docx`
+        `/file/${new Date().toISOString().substring(0, 7)}-${state.nim}.docx`
       )
       .put(selectedFile, metadata);
 
-     const imageUrl = await snapshot.ref.getDownloadURL();
+    const imageUrl = await snapshot.ref.getDownloadURL();
 
-    if(selectedFile == null){
+    if (selectedFile == null) {
       await db
-      .doc(`data-mahasiswa/${nim}`)
-      .update({...state, judul:{judul: state.judul.judul, created_at:new Date().toLocaleDateString().substring(0, 10), updated_at:state.judul.updated_at, url: state.judul.url }})
-      .then(() => {
-        toast({
-          description: "Upload Judul Berhasil",
-          status: "success",
+        .doc(`data-mahasiswa/${nim}`)
+        .update({
+          ...state,
+          judul: {
+            judul: state.judul.judul,
+            created_at: new Date().toLocaleDateString().substring(0, 10),
+            updated_at: state.judul.updated_at,
+            url: state.judul.url,
+          },
+        })
+        .then(() => {
+          toast({
+            description: "Upload Judul Berhasil",
+            status: "success",
+          });
+          setLoading(false);
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setLoading(false);
-    }else{
+      setLoading(false);
+    } else {
       await db
-      .doc(`data-mahasiswa/${nim}`)
-      .update({...state, judul:{judul: state.judul.judul, created_at:state.judul.created_at, updated_at:new Date().toLocaleDateString().substring(0, 10), url: imageUrl }})
-      .then(() => {
-        toast({
-          description: "Berhasil Memperbarui Data",
-          status: "success",
+        .doc(`data-mahasiswa/${nim}`)
+        .update({
+          ...state,
+          judul: {
+            judul: state.judul.judul,
+            created_at: state.judul.created_at,
+            updated_at: new Date().toLocaleDateString().substring(0, 10),
+            url: imageUrl,
+          },
+        })
+        .then(() => {
+          toast({
+            description: "Berhasil Memperbarui Data",
+            status: "success",
+          });
+          setLoading(false);
+        })
+        .catch((e) => {
+          console.log(e);
         });
-        setLoading(false);
-      })
-      .catch((e) => {
-        console.log(e);
-      });
-    setLoading(false);
+      setLoading(false);
     }
   };
 
-
   return (
     <SimpleGrid columns={2} spacing={10}>
-
-    <Container maxW={"container.xl"}>
-         <InputGroup mt={2}>
-        <InputLeftAddon children='NIM' />
-        <Input type='tel' placeholder='' value={state.nim} 
-        />
-        </InputGroup>
-      <InputGroup mt={2}>
-        <InputLeftAddon children='Nama' />
-        <Input type='tel' placeholder=''  value={state.nama} 
-        />
+      <Container maxW={"container.xl"}>
+        <InputGroup mt={2}>
+          <InputLeftAddon children="NIM" />
+          <Input type="tel" placeholder="" value={state.nim} />
         </InputGroup>
         <InputGroup mt={2}>
-        <InputLeftAddon children='Judul' />
-        <Textarea onChange={(e) => setState((prev) => ({ ...prev, judul: {judul: e.target.value, created_at: state.judul.created_at, updated_at: state.judul.updated_at, url: state.judul.url}}))}
-         value={state.judul.judul}  placeholder=''></Textarea>
+          <InputLeftAddon children="Nama" />
+          <Input type="tel" placeholder="" value={state.nama} />
         </InputGroup>
-      {
-        state.judul.judul != ""?
-        <Box mt={2} p={4} height={20}  borderWidth='1px' borderRadius='lg'> 
-      <FilePick
-          onChange={(e) => onSelectFile(e.target)}
-          />
-          </Box> :
+        <InputGroup mt={2}>
+          <InputLeftAddon children="Judul" />
+          <Textarea
+            onChange={(e) =>
+              setState((prev) => ({
+                ...prev,
+                judul: {
+                  judul: e.target.value,
+                  created_at: state.judul.created_at,
+                  updated_at: state.judul.updated_at,
+                  url: state.judul.url,
+                },
+              }))
+            }
+            value={state.judul.judul}
+            placeholder=""
+          ></Textarea>
+        </InputGroup>
+        {state.judul.judul != "" ? (
+          <Box mt={2} p={4} height={20} borderWidth="1px" borderRadius="lg">
+            <FilePick onChange={(e) => onSelectFile(e.target)} />
+          </Box>
+        ) : (
           <></>
-        }
+        )}
         <VStack align={"end"}>
-        <HStack align={"end"}>
-      <Button
-        colorScheme={"green"}
-        color={"white"}
-        mt={4}
-        onClick={() => onSubmit(state.nim)}
-        isLoading={loading}
-      >
-        Simpan 
-      </Button>
-      <Button
-          mt={4}
-          colorScheme={"green"}
-          isLoading={loading}
-        onClick={() => router.back()}
-        >
-          Kembali
-        </Button>
-      </HStack>
-      </VStack>
-    </Container>
+          <HStack align={"end"}>
+            <Button
+              colorScheme={"green"}
+              color={"white"}
+              mt={4}
+              onClick={() => onSubmit(state.nim)}
+              isLoading={loading}
+            >
+              Simpan
+            </Button>
+            <Button
+              mt={4}
+              colorScheme={"green"}
+              isLoading={loading}
+              onClick={() => router.back()}
+            >
+              Kembali
+            </Button>
+          </HStack>
+        </VStack>
+      </Container>
     </SimpleGrid>
   );
 };

@@ -73,14 +73,12 @@ const DataDosen = () => {
             <Th>NIP</Th>
             <Th>Nama</Th>
             <Th>Aksi</Th>
-            
           </Tr>
         </Thead>
         <Tbody>
           {state.map((it, id) => (
             <Tr key={id}>
-              
-              <Td>{id+ 1}</Td>
+              <Td>{id + 1}</Td>
               <Td>{it.nip}</Td>
               <Td>{it.nama}</Td>
               <Td>
