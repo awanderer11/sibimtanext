@@ -154,7 +154,7 @@ const Proposal = () => {
                 aria-label="icon"
                 icon={<FiDownload />}
                 onClick={onDownload}
-                isDisabled={state.yudisium != false ? true : false}
+                isDisabled={state.yudisium == false ? true : false}
               />
             </Td>
           </Tr>
